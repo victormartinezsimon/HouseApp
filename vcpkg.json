@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "sqlitecpp",
-    "curl"
+    "curl",
+    "libxml2"
   ]
 }

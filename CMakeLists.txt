@@ -56,3 +56,6 @@ target_link_libraries(HouseApp PRIVATE SQLiteCpp)
 find_package(CURL REQUIRED)
 target_link_libraries(HouseApp PRIVATE CURL::libcurl)
 
+find_package(LibXml2 REQUIRED)
+target_link_libraries(HouseApp PRIVATE LibXml2::LibXml2)
+
