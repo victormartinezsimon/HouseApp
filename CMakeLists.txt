@@ -28,7 +28,7 @@ set(SOURCES
 )
 
 set(HEADERS
-    include/DatabaseConnector.h
+    src/DatabaseConnector.h
 )
 
 # Crea un grupo para los archivos .h en Visual Studio
