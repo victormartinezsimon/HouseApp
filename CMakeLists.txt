@@ -25,10 +25,12 @@ endif()
 set(SOURCES
     src/main.cpp
     src/DatabaseConnector.cpp
+    src/WebDownloader.cpp
 )
 
 set(HEADERS
     src/DatabaseConnector.h
+    src/WebDownloader.h
 )
 
 # Crea un grupo para los archivos .h en Visual Studio
