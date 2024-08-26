@@ -26,11 +26,10 @@ size_t write_data(char* data, size_t size, size_t nmemb, void* clientp)
 
 std::string WebDownloader::GetTextFromWeb(const std::string& url) const
 {
+    std::string result;
     CURL* handle = curl_easy_init();
-
     curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
     curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
-    std::string result;
     curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
     curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
     auto success = curl_easy_perform(handle);

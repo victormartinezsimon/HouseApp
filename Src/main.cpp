@@ -2,7 +2,6 @@
 #include "DatabaseConnector.h"
 #include "WebDownloader.h"
 
-
 void TestDataBase()
 {
     Database::DatabaseConnector* connector = new Database::DatabaseConnector();
@@ -25,22 +24,22 @@ void callbackDownloader(const std::string& str)
 void TestDownloader()
 {
     WebDownloader* downloader = new WebDownloader();
-
+    
     auto result = downloader->GetTextFromWeb("https://www.victormartinezsimon.com");
     std::cout << "not thread: " << "\n";
     std::cout << result.substr(0, 100) << "\n";
-
-
+    
+    
     downloader->GetTextFromWeb_Thread("https://www.victormartinezsimon.com", callbackDownloader);
     std::this_thread::sleep_for(std::chrono::seconds(3));
-
+    
     delete downloader;
 }
 
 int main()
 {
     TestDataBase();
-
+    
     TestDownloader();
 
     return 0;

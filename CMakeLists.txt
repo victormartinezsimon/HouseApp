@@ -36,11 +36,9 @@ set(HEADERS
 # Crea un grupo para los archivos .h en Visual Studio
 source_group("Headers" FILES ${HEADERS})
 
+
 # Añade el ejecutable
 add_executable(HouseApp ${SOURCES} ${HEADERS})
-
-# Añadir el ejecutable (compilar main.cpp)
-#add_executable(HouseApp main.cpp DatabaseConnector.cpp)
 
 # Incluir directorios de cabeceras
 target_include_directories(HouseApp PUBLIC ${PROJECT_SOURCE_DIR}/include)
@@ -48,10 +46,13 @@ target_include_directories(HouseApp PUBLIC ${PROJECT_SOURCE_DIR}/include)
 # Especificar el uso de C++17
 target_compile_features(HouseApp PRIVATE cxx_std_20)
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/SQLiteCpp)
+#sqlite3
+#add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/SQLiteCpp)
+#target_link_libraries(HouseApp PRIVATE SQLiteCpp sqlite3)
 
-target_link_libraries(HouseApp
-  SQLiteCpp
-  sqlite3
-  )
+find_package(SQLiteCpp CONFIG REQUIRED)
+target_link_libraries(HouseApp PRIVATE SQLiteCpp)
+
+find_package(CURL REQUIRED)
+target_link_libraries(HouseApp PRIVATE CURL::libcurl)
 
