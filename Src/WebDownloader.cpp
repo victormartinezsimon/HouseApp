@@ -24,7 +24,7 @@ size_t write_data(char* data, size_t size, size_t nmemb, void* clientp)
     return realsize;
 }
 
-std::string WebDownloader::GetTextFromWeb(const std::string& url)
+std::string WebDownloader::GetTextFromWeb(const std::string& url) const
 {
     CURL* handle = curl_easy_init();
 
@@ -37,4 +37,15 @@ std::string WebDownloader::GetTextFromWeb(const std::string& url)
     curl_easy_reset(handle);
 
     return result;
+}
+
+void WebDownloader::GetTextFromWeb_Thread(const std::string& url, DownloaderCallback callback) const
+{
+    std::thread t([this, url, callback]()
+        {
+            auto result = this->GetTextFromWeb(url);
+            callback(result);
+        });
+
+    t.detach();
 }
