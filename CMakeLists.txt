@@ -59,3 +59,6 @@ target_link_libraries(HouseApp PRIVATE CURL::libcurl)
 find_package(LibXml2 REQUIRED)
 target_link_libraries(HouseApp PRIVATE LibXml2::LibXml2)
 
+find_package(RapidJSON CONFIG REQUIRED)
+  target_link_libraries(HouseApp PRIVATE rapidjson)
+

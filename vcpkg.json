@@ -2,6 +2,7 @@
   "dependencies": [
     "sqlitecpp",
     "curl",
-    "libxml2"
+    "libxml2",
+    "rapidjson"
   ]
 }
