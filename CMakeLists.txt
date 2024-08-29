@@ -26,11 +26,13 @@ set(SOURCES
     src/main.cpp
     src/DatabaseConnector.cpp
     src/WebDownloader.cpp
+    src/WebParserConfig.cpp
 )
 
 set(HEADERS
     src/DatabaseConnector.h
     src/WebDownloader.h
+    src/WebParserConfig.h
 )
 
 # Crea un grupo para los archivos .h en Visual Studio
@@ -45,6 +47,15 @@ target_include_directories(HouseApp PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 # Especificar el uso de C++17
 target_compile_features(HouseApp PRIVATE cxx_std_20)
+
+# Especifica la carpeta fuente y la carpeta de destino
+set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/Config")
+set(DESTINATION_DIR "${CMAKE_BINARY_DIR}")
+
+# Comando para copiar los archivos de source_dir a destination_dir
+file(COPY "${SOURCE_DIR}" DESTINATION "${DESTINATION_DIR}")
+# Mensaje para confirmar que la copia se realizó
+message(STATUS "Archivos copiados de ${SOURCE_DIR} a ${DESTINATION_DIR}")
 
 #sqlite3
 #add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/SQLiteCpp)

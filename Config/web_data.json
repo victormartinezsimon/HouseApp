@@ -1,0 +1,18 @@
+[
+    {
+        "main_url": "https://www.scrapingcourse.com/ecommerce/",
+        "main_path": "//li[contains(@class, 'product')]",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//a/span",
+                "data_extractor": ""
+            }
+        ]
+    }
+]
