@@ -15,6 +15,7 @@ public:
 
     struct WebData
     {
+        std::string id;
         std::string mainUrl;
         std::string mainPath;
         std::map<std::string, DataInfo> dataInfo;

@@ -24,6 +24,7 @@ void WebParserConfig::Parse(const std::string& path)
 
         WebData webData;
 
+        webData.id = v["id"].GetString();
         webData.mainUrl = v["main_url"].GetString();
         webData.mainPath = v["main_path"].GetString();
 
@@ -33,13 +34,13 @@ void WebParserConfig::Parse(const std::string& path)
         {
             auto data = data_to_extract[i].GetObject();
 
-            std::string id = data["id"].GetString();
+            std::string id_dataInfo = data["id"].GetString();
             std::string path = data["path"].GetString();
             std::string data_extractor = data["data_extractor"].GetString();
-            webData.dataInfo.insert({ id, { id, path, data_extractor } });
+            webData.dataInfo.insert({ id_dataInfo, { id_dataInfo, path, data_extractor } });
         }
 
-        _webData.insert({ webData.mainUrl , webData });
+        _webData.insert({ webData.id , webData });
     }
 }
 
