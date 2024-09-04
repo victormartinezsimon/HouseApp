@@ -11,7 +11,7 @@ public:
     {
         std::string id;
         std::string path;
-        std::string data;
+        std::string data_extractor;
     };
 
     struct WebData

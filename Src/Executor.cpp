@@ -2,8 +2,10 @@
 #include "DatabaseConnector.h"
 #include "WebParserConfig.h"
 #include "WebDownloader.h"
+#include "WebParser.h"
 
 Executor::Executor(Database::DatabaseConnector* db, WebDownloader* downloader):_db(db), _downloader(downloader) {}
+
 
 void Executor::Run(WebParserConfig* config)
 {
@@ -18,10 +20,19 @@ void Executor::Run(WebParserConfig* config)
 
 void Executor::ParseData(WebParserConfig* config, std::string key) const
 {
-    auto dataInfo = config->GetDataInfo(key);
+    auto webData = config->GetDataInfo(key);
 
-    std::string txt = _downloader->GetTextFromWeb(dataInfo.mainUrl);
+    std::string txt = _downloader->GetTextFromWeb(webData.mainUrl);
 
-    //Parser(db, dataInfo, txt);
+    WebParser* parser = new WebParser(txt);
 
+    auto result = parser->Parse(webData);
+
+    for (auto&& r : result)
+    {
+        auto url = r["url"];
+        auto source = r["price"];
+
+        _db->InsertAd(url, source);
+    }
 }

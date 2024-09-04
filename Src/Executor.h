@@ -13,6 +13,7 @@ class Executor
 
 public:
     Executor(Database::DatabaseConnector* db, WebDownloader* downloader);
+    ~Executor();
 
     void Run(WebParserConfig* config);
 
