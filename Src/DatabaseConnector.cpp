@@ -34,8 +34,9 @@ namespace Database
         std::string sql = "";
         sql += "CREATE TABLE IF NOT EXISTS ADS(";
         sql += "ID INTEGER PRIMARY KEY AUTOINCREMENT, ";
-        sql += "URL           TEXT     NOT NULL, ";
         sql += "SOURCE        TEXT     NOT NULL, ";
+        sql += "URL           TEXT     NOT NULL, ";
+        sql += "PRICE        TEXT     NOT NULL, ";
         sql += "CREATION_DATE DATE     NOT NULL, ";
         sql += "UPDATE_DATE   DATE     NOT NULL, ";
         sql += "AVAILABLE     BOOLEAN ";
@@ -45,13 +46,14 @@ namespace Database
         assert(SQLite::OK== result);
     }
 
-    void DatabaseConnector::InsertAd(std::string url, std::string source)
+    void DatabaseConnector::InsertAd(std::string url, std::string source, std::string price)
     {
         std::string sql = "";
-        sql += "INSERT INTO ADS (URL,SOURCE,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
+        sql += "INSERT INTO ADS (URL,SOURCE,PRICE,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
         sql += "VALUES ";
         sql += "(\"" + url + "\"";
         sql += ",\"" + source + "\"";
+        sql += ",\"" + price + "\"";
         sql += ", DateTime('now')";
         sql += ", DateTime('now')";
         sql += ", TRUE";
