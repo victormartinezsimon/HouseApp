@@ -27,12 +27,14 @@ set(SOURCES
     src/DatabaseConnector.cpp
     src/WebDownloader.cpp
     src/WebParserConfig.cpp
+    src/Executor.cpp
 )
 
 set(HEADERS
     src/DatabaseConnector.h
     src/WebDownloader.h
     src/WebParserConfig.h
+    src/Executor.h
 )
 
 # Crea un grupo para los archivos .h en Visual Studio

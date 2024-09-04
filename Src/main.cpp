@@ -2,6 +2,7 @@
 #include "DatabaseConnector.h"
 #include "WebDownloader.h"
 #include "WebParserConfig.h"
+#include "Executor.h"
 
 #include "libxml/HTMLparser.h"
 #include "libxml/xpath.h"
@@ -103,6 +104,16 @@ void TestJson()
     config->Parse("config/web_data.json");
 }
 
+void TestExecutor()
+{
+    WebParserConfig* config = new WebParserConfig();
+    Database::DatabaseConnector* db = new Database::DatabaseConnector();
+    WebDownloader* downloader = new WebDownloader();
+
+    Executor* executor = new Executor(db, downloader);
+    executor->Run(config);
+}
+
 int main()
 {
     //TestDataBase();
@@ -111,7 +122,9 @@ int main()
 
     //TestParser();
 
-    TestJson();
+    //TestJson();
+
+    TestExecutor();
 
     return 0;
 }

@@ -48,3 +48,14 @@ const WebParserConfig::WebData WebParserConfig::GetDataInfo(const std::string& s
 {
     return _webData.at(str);
 }
+
+std::vector<std::string> WebParserConfig::GetAllKeys() const
+{
+    std::vector<std::string> toReturn;
+
+    for (auto &&v : _webData)
+    {
+        toReturn.push_back(v.first);
+    }
+    return toReturn;
+}

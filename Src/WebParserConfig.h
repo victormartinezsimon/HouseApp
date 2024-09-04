@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include <vector>
 
 class WebParserConfig
 {
@@ -25,6 +26,7 @@ public:
 
     void Parse(const std::string& path);
     const WebData  GetDataInfo(const std::string& str) const;
+    std::vector<std::string> GetAllKeys() const;
 
 private:
     std::map< std::string, WebData> _webData;
