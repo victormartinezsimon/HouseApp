@@ -46,7 +46,7 @@ namespace Database
         assert(SQLite::OK== result);
     }
 
-    void DatabaseConnector::InsertAd(std::string url, std::string source, std::string price)
+    void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price)
     {
         std::string sql = "";
         sql += "INSERT INTO ADS (URL,SOURCE,PRICE,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";

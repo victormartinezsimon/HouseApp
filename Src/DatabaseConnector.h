@@ -26,7 +26,7 @@ namespace Database
         DatabaseConnector();
         ~DatabaseConnector();
 
-        void InsertAd(std::string url, std::string source, std::string price);
+        void InsertAd(const std::string& url, const std::string& source, const std::string& price);
         std::vector<AdStruct> GetAllAds();
 
     private:
