@@ -29,6 +29,7 @@ set(SOURCES
     src/WebParserConfig.cpp
     src/Executor.cpp
     src/WebParser.cpp
+    src/GeneralConfig.cpp
 )
 
 set(HEADERS
@@ -37,6 +38,7 @@ set(HEADERS
     src/WebParserConfig.h
     src/Executor.h
     src/WebParser.h
+    src/GeneralConfig.h
 )
 
 # Crea un grupo para los archivos .h en Visual Studio

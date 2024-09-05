@@ -3,10 +3,14 @@
 #include "WebDownloader.h"
 #include "WebParserConfig.h"
 #include "Executor.h"
+#include "GeneralConfig.h"
 
 
 int main()
 {
+    GeneralConfig* generalConfig = new GeneralConfig();
+    generalConfig->Parse("config/general_config.json");
+
     WebParserConfig* config = new WebParserConfig();
     config->Parse("config/web_data.json");
 

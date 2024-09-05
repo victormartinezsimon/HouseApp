@@ -1,0 +1,5 @@
+{
+    "use_hash_collision" : true,
+    "telegram_key": "",
+    "use_threads": false
+}
