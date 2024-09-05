@@ -8,6 +8,8 @@ namespace Database
     {
         Init_database();
         Create_tables();
+        _maxCollisions = _config->GetValueInt("max_collisions");
+        _use_hash_collision = _config->GetValueBool("use_hash_collision");
     }
 
     void DatabaseConnector::Init_database()
@@ -105,15 +107,27 @@ namespace Database
     {
         auto hash = GetHash(url, source, price);
 
+        return TryInsertAd(url, source, price, hash, _maxCollisions);
+
+    }
+
+    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions)
+    {
+        if (currentCollisions == 0)
+        {
+            assert(false && "limit collisions reached");
+            return false;
+        }
+
         if (!IsHashOnDB(hash))
         {
             InsertAd(url, source, price, hash);
             return true;
         }
 
-        if (_config->GetValueBool("use_hash_collision"))
+        if (_use_hash_collision)
         {
-            return ManageHashCollision(url, source, price, hash);
+            return ManageHashCollision(url, source, price, hash, _maxCollisions);
         }
 
         return false;
@@ -157,12 +171,12 @@ namespace Database
         }
         else
         {
-            assert(false);
+            assert(false && "hash element should exist. Search before call this method");
         }
         return toReturn;
     }
 
-    bool DatabaseConnector::ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash)
+    bool DatabaseConnector::ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions)
     {
         auto onDB = GetHashElement(hash);
 
@@ -172,13 +186,13 @@ namespace Database
         same &= (onDB.source == source);
         same &= (onDB.price == price);
 
-        if (!same)
+        size_t newHash = hash + 1;
+
+        if (same)
         {
-            size_t newHash = hash + 1;
-            InsertAd(url, source, price, newHash);
-            return true;
+            return false;
         }
 
-        return false;
+        return TryInsertAd(url, source, price, newHash, totalCollisions - 1);
     }
 }

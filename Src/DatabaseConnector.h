@@ -38,13 +38,16 @@ namespace Database
         void CreateAdsTable();
         size_t GetHash(const std::string& url, const std::string& source, const std::string& price);
         void InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash);
-        bool ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash);
+        bool ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions);
         bool IsHashOnDB(const size_t hash);
         AdStruct GetHashElement(const size_t hash);
+        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions);
 
 
     private:
         SQLite::Database* DB = nullptr;
         GeneralConfig* _config;
+        int _maxCollisions = 10;
+        bool _use_hash_collision = false;
     };
 }
