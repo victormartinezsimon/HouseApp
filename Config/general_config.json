@@ -1,5 +1,6 @@
 {
     "use_hash_collision" : true,
     "telegram_key": "",
-    "use_threads": false
+    "use_threads": false, 
+    "web_data_location": "config/web_data.json"
 }

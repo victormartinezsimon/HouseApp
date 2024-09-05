@@ -12,9 +12,9 @@ int main()
     generalConfig->Parse("config/general_config.json");
 
     WebParserConfig* config = new WebParserConfig();
-    config->Parse("config/web_data.json");
+    config->Parse(generalConfig->GetValueString("web_data_location"));
 
-    Database::DatabaseConnector* db = new Database::DatabaseConnector();
+    Database::DatabaseConnector* db = new Database::DatabaseConnector( generalConfig );
     WebDownloader* downloader = new WebDownloader();
 
     Executor* executor = new Executor(db, downloader);

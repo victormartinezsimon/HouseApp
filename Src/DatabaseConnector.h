@@ -6,6 +6,7 @@
 #include <functional>
 #include <vector>
 
+class GeneralConfig;
 
 namespace Database
 {
@@ -16,6 +17,7 @@ namespace Database
         int id = 0;
         std::string url = "";
         std::string source = "";
+        std::string price = "";
         bool available = false;
     };
 
@@ -23,7 +25,7 @@ namespace Database
     class DatabaseConnector
     {
     public:
-        DatabaseConnector();
+        DatabaseConnector(GeneralConfig* config);
         ~DatabaseConnector();
 
         bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price);
@@ -36,11 +38,13 @@ namespace Database
         void CreateAdsTable();
         size_t GetHash(const std::string& url, const std::string& source, const std::string& price);
         void InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash);
+        bool ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash);
         bool IsHashOnDB(const size_t hash);
         AdStruct GetHashElement(const size_t hash);
 
 
     private:
         SQLite::Database* DB = nullptr;
+        GeneralConfig* _config;
     };
 }

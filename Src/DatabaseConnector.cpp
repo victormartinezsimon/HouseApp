@@ -1,9 +1,10 @@
 #include "DatabaseConnector.h"
 #include <cassert>
+#include "GeneralConfig.h"
 
 namespace Database
 {
-    DatabaseConnector::DatabaseConnector()
+    DatabaseConnector::DatabaseConnector(GeneralConfig* config):_config(config)
     {
         Init_database();
         Create_tables();
@@ -69,7 +70,7 @@ namespace Database
     {
         std::vector<AdStruct> toReturn;
 
-        std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE from ADS";
+        std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE, PRICE from ADS";
         SQLite::Statement   query(*DB, sql);
         
         while (query.executeStep())
@@ -77,13 +78,15 @@ namespace Database
             int id = query.getColumn( 0).getInt();
             const std::string url = query.getColumn(1).getString();
             const std::string source = query.getColumn(2).getString();
-            bool available = query.getColumn(2).getInt() == 1;
+            bool available = query.getColumn(3).getInt() == 1;
+            const std::string price = query.getColumn(4).getString();
         
             AdStruct toAdd;
             toAdd.id = id;
             toAdd.url = url;
             toAdd.source = source;
             toAdd.available = available;
+            toAdd.price = price;
         
             toReturn.push_back(toAdd);
         }
@@ -107,6 +110,12 @@ namespace Database
             InsertAd(url, source, price, hash);
             return true;
         }
+
+        if (_config->GetValueBool("use_hash_collision"))
+        {
+            return ManageHashCollision(url, source, price, hash);
+        }
+
         return false;
     }
 
@@ -126,7 +135,7 @@ namespace Database
    
     AdStruct DatabaseConnector::GetHashElement(const size_t hash)
     {
-        std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE from ADS";
+        std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE, PRICE from ADS";
         sql += " where hash = \"" + std::to_string(hash) + "\"";
         SQLite::Statement   query(*DB, sql);
 
@@ -137,17 +146,39 @@ namespace Database
             int id = query.getColumn(0).getInt();
             const std::string url = query.getColumn(1).getString();
             const std::string source = query.getColumn(2).getString();
-            bool available = query.getColumn(2).getInt() == 1;
+            bool available = query.getColumn(3).getInt() == 1;
+            const std::string price = query.getColumn(4).getString();
 
             toReturn.id = id;
             toReturn.url = url;
             toReturn.source = source;
             toReturn.available = available;
+            toReturn.price = price;
         }
         else
         {
             assert(false);
         }
         return toReturn;
+    }
+
+    bool DatabaseConnector::ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash)
+    {
+        auto onDB = GetHashElement(hash);
+
+        bool same = true;
+
+        same &= (onDB.url == url);
+        same &= (onDB.source == source);
+        same &= (onDB.price == price);
+
+        if (!same)
+        {
+            size_t newHash = hash + 1;
+            InsertAd(url, source, price, newHash);
+            return true;
+        }
+
+        return false;
     }
 }

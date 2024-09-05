@@ -10,7 +10,9 @@ class GeneralConfig
 
 public:
     void Parse(const std::string& path);
-    std::string GetValue(const std::string& key) const;
+    std::string GetValueString(const std::string& key) const;
+    int GetValueInt(const std::string& key) const;
+    bool GetValueBool(const std::string& key) const;
 
 private:
 

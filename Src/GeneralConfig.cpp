@@ -44,8 +44,26 @@ std::string GeneralConfig::GetValueAsString(rapidjson::Value& value)
     return value.GetString();
 }
 
-std::string GeneralConfig::GetValue(const std::string& key) const
+std::string GeneralConfig::GetValueString(const std::string& key) const
 {
     assert(_params.contains(key));
     return _params.at(key);
+}
+
+int GeneralConfig::GetValueInt(const std::string& key) const
+{
+    assert(_params.contains(key));
+
+    auto value = _params.at(key);
+    return atoi(value.c_str());
+
+
+}
+bool GeneralConfig::GetValueBool(const std::string& key) const
+{
+    assert(_params.contains(key));
+
+    auto value = _params.at(key);
+    
+    return value == "1";
 }
