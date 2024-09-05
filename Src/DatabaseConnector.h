@@ -34,6 +34,7 @@ namespace Database
         void Create_tables();
 
         void CreateAdsTable();
+        size_t GetHash(const std::string& url, const std::string& source, const std::string& price);
 
 
     private:

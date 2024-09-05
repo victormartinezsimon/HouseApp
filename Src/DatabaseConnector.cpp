@@ -36,7 +36,8 @@ namespace Database
         sql += "ID INTEGER PRIMARY KEY AUTOINCREMENT, ";
         sql += "SOURCE        TEXT     NOT NULL, ";
         sql += "URL           TEXT     NOT NULL, ";
-        sql += "PRICE        TEXT     NOT NULL, ";
+        sql += "PRICE         TEXT     NOT NULL, ";
+        sql += "HASH          TEXT     NOT NULL, ";
         sql += "CREATION_DATE DATE     NOT NULL, ";
         sql += "UPDATE_DATE   DATE     NOT NULL, ";
         sql += "AVAILABLE     BOOLEAN ";
@@ -48,12 +49,15 @@ namespace Database
 
     void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price)
     {
+        auto hash = GetHash(url, source, price);
+
         std::string sql = "";
-        sql += "INSERT INTO ADS (URL,SOURCE,PRICE,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
+        sql += "INSERT INTO ADS (URL,SOURCE,PRICE,HASH,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
         sql += "VALUES ";
         sql += "(\"" + url + "\"";
         sql += ",\"" + source + "\"";
         sql += ",\"" + price + "\"";
+        sql += ",\"" + std::to_string(hash) + "\"";
         sql += ", DateTime('now')";
         sql += ", DateTime('now')";
         sql += ", TRUE";
@@ -87,5 +91,12 @@ namespace Database
         }
 
         return toReturn;
+    }
+
+    size_t DatabaseConnector::GetHash(const std::string& url, const std::string& source, const std::string& price)
+    {
+        std::string str = url + "_" + source + "_" + price;
+        auto sol = std::hash<std::string>{}(str);
+        return sol;
     }
 }
