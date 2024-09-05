@@ -47,10 +47,8 @@ namespace Database
         assert(SQLite::OK== result);
     }
 
-    void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price)
+    void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash)
     {
-        auto hash = GetHash(url, source, price);
-
         std::string sql = "";
         sql += "INSERT INTO ADS (URL,SOURCE,PRICE,HASH,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
         sql += "VALUES ";
@@ -98,5 +96,58 @@ namespace Database
         std::string str = url + "_" + source + "_" + price;
         auto sol = std::hash<std::string>{}(str);
         return sol;
+    }
+
+    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price)
+    {
+        auto hash = GetHash(url, source, price);
+
+        if (!IsHashOnDB(hash))
+        {
+            InsertAd(url, source, price, hash);
+            return true;
+        }
+        return false;
+    }
+
+    bool DatabaseConnector::IsHashOnDB(const size_t hash)
+    {
+        std::string sql = "SELECT * from ADS";
+        sql += " where hash = \"" + std::to_string(hash) + "\"";
+        SQLite::Statement   query(*DB, sql);
+
+        if (query.executeStep())
+        {
+            return true;
+        }
+
+        return false;
+    }
+   
+    AdStruct DatabaseConnector::GetHashElement(const size_t hash)
+    {
+        std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE from ADS";
+        sql += " where hash = \"" + std::to_string(hash) + "\"";
+        SQLite::Statement   query(*DB, sql);
+
+        AdStruct toReturn;
+
+        if (query.executeStep())
+        {
+            int id = query.getColumn(0).getInt();
+            const std::string url = query.getColumn(1).getString();
+            const std::string source = query.getColumn(2).getString();
+            bool available = query.getColumn(2).getInt() == 1;
+
+            toReturn.id = id;
+            toReturn.url = url;
+            toReturn.source = source;
+            toReturn.available = available;
+        }
+        else
+        {
+            assert(false);
+        }
+        return toReturn;
     }
 }
