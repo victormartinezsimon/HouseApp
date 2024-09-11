@@ -35,10 +35,10 @@ void Executor::ParseData(WebParserConfig* config, std::string key) const
         auto price = r["price"];
         auto source = webData.id;
 
-        Add* add = new Add();
-        add->BuildAdd(r);
-        add->source = webData.id;
+        Add add;
+        add.BuildAdd(r);
+        add.source = webData.id;
 
-        _db->TryInsertAd(url, source, price);
+        _db->TryInsertAd(add);
     }
 }

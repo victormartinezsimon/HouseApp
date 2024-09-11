@@ -1,16 +1,17 @@
 #include "DatabaseConnector.h"
 #include <cassert>
 #include "GeneralConfig.h"
+#include "Add.h"
 
 namespace Database
 {
     DatabaseConnector::DatabaseConnector(GeneralConfig* config):_config(config)
     {
-        Init_database();
-        Create_tables();
         _maxCollisions = _config->GetValueInt("max_collisions");
         _use_hash_collision = _config->GetValueBool("use_hash_collision");
         _dataBasePath = _config->GetValueString("database_path");
+        Init_database();
+        Create_tables();
     }
 
     void DatabaseConnector::Init_database()
@@ -51,14 +52,14 @@ namespace Database
         assert(SQLite::OK== result);
     }
 
-    void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash)const
+    void DatabaseConnector::InsertAd(const Add& add, const size_t hash)const
     {
         std::string sql = "";
         sql += "INSERT INTO ADS (URL,SOURCE,PRICE,HASH,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
         sql += "VALUES ";
-        sql += "(\"" + url + "\"";
-        sql += ",\"" + source + "\"";
-        sql += ",\"" + price + "\"";
+        sql += "(\"" + add.url + "\"";
+        sql += ",\"" + add.source + "\"";
+        sql += ",\"" + add.price + "\"";
         sql += ",\"" + std::to_string(hash) + "\"";
         sql += ", DateTime('now')";
         sql += ", DateTime('now')";
@@ -69,9 +70,9 @@ namespace Database
         assert(SQLite::OK == result);
     }
 
-    std::vector<AdStruct> DatabaseConnector::GetAllAds()const
+    std::vector<Add> DatabaseConnector::GetAllAds()const
     {
-        std::vector<AdStruct> toReturn;
+        std::vector<Add> toReturn;
 
         std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE, PRICE from ADS";
         SQLite::Statement   query(*DB, sql);
@@ -84,11 +85,11 @@ namespace Database
             bool available = query.getColumn(3).getInt() == 1;
             const std::string price = query.getColumn(4).getString();
         
-            AdStruct toAdd;
-            toAdd.id = id;
+            Add toAdd;
+            //toAdd.id = id;
             toAdd.url = url;
             toAdd.source = source;
-            toAdd.available = available;
+            //toAdd.available = available;
             toAdd.price = price;
         
             toReturn.push_back(toAdd);
@@ -97,22 +98,22 @@ namespace Database
         return toReturn;
     }
 
-    size_t DatabaseConnector::GetHash(const std::string& url, const std::string& source, const std::string& price)const
+    size_t DatabaseConnector::GetHash(const Add& add)const
     {
-        std::string str = url + "_" + source + "_" + price;
+        std::string str = add.url + "_" + add.source + "_" + add.price;
         auto sol = std::hash<std::string>{}(str);
         return sol;
     }
 
-    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price)const
+    bool DatabaseConnector::TryInsertAd(const Add& add)const
     {
-        auto hash = GetHash(url, source, price);
+        auto hash = GetHash(add);
 
-        return TryInsertAd(url, source, price, hash, _maxCollisions);
+        return TryInsertAd(add, hash, _maxCollisions);
 
     }
 
-    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions)const
+    bool DatabaseConnector::TryInsertAd(const Add& add, const size_t hash, int currentCollisions)const
     {
         if (currentCollisions == 0)
         {
@@ -122,13 +123,13 @@ namespace Database
 
         if (!IsHashOnDB(hash))
         {
-            InsertAd(url, source, price, hash);
+            InsertAd(add, hash);
             return true;
         }
 
         if (_use_hash_collision)
         {
-            return ManageHashCollision(url, source, price, hash, _maxCollisions);
+            return ManageHashCollision(add, hash, _maxCollisions);
         }
 
         return false;
@@ -148,13 +149,13 @@ namespace Database
         return false;
     }
    
-    AdStruct DatabaseConnector::GetHashElement(const size_t hash)const
+    Add DatabaseConnector::GetHashElement(const size_t hash)const
     {
         std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE, PRICE from ADS";
         sql += " where hash = \"" + std::to_string(hash) + "\"";
         SQLite::Statement   query(*DB, sql);
 
-        AdStruct toReturn;
+        Add toReturn;
 
         if (query.executeStep())
         {
@@ -164,10 +165,10 @@ namespace Database
             bool available = query.getColumn(3).getInt() == 1;
             const std::string price = query.getColumn(4).getString();
 
-            toReturn.id = id;
+            //toReturn.id = id;
             toReturn.url = url;
             toReturn.source = source;
-            toReturn.available = available;
+            //toReturn.available = available;
             toReturn.price = price;
         }
         else
@@ -177,15 +178,15 @@ namespace Database
         return toReturn;
     }
 
-    bool DatabaseConnector::ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions)const
+    bool DatabaseConnector::ManageHashCollision(const Add& add, const size_t hash, int totalCollisions)const
     {
         auto onDB = GetHashElement(hash);
 
         bool same = true;
 
-        same &= (onDB.url == url);
-        same &= (onDB.source == source);
-        same &= (onDB.price == price);
+        same &= (onDB.url == add.url);
+        same &= (onDB.source == add.source);
+        same &= (onDB.price == add.price);
 
         size_t newHash = hash + 1;
 
@@ -194,6 +195,6 @@ namespace Database
             return false;
         }
 
-        return TryInsertAd(url, source, price, newHash, totalCollisions - 1);
+        return TryInsertAd(add, newHash, totalCollisions - 1);
     }
 }

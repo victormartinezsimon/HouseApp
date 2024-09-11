@@ -7,40 +7,30 @@
 #include <vector>
 
 class GeneralConfig;
+class Add;
 
 namespace Database
 {
-
-    struct AdStruct
-    {
-        int id = 0;
-        std::string url = "";
-        std::string source = "";
-        std::string price = "";
-        bool available = false;
-    };
-
-
     class DatabaseConnector
     {
     public:
         DatabaseConnector(GeneralConfig* config);
         ~DatabaseConnector();
 
-        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price)const;
-        std::vector<AdStruct> GetAllAds()const;
+        bool TryInsertAd(const Add& add)const;
+        std::vector<Add> GetAllAds()const;
 
     private:
         void Init_database();
         void Create_tables()const;
 
         void CreateAdsTable()const;
-        size_t GetHash(const std::string& url, const std::string& source, const std::string& price)const;
-        void InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash)const;
-        bool ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions)const;
+        size_t GetHash(const Add& add)const;
+        void InsertAd(const Add& add, const size_t hash)const;
+        bool ManageHashCollision(const Add& add, const size_t hash, int totalCollisions)const;
         bool IsHashOnDB(const size_t hash)const;
-        AdStruct GetHashElement(const size_t hash)const;
-        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions)const;
+        Add GetHashElement(const size_t hash)const;
+        bool TryInsertAd(const Add& add, const size_t hash, int currentCollisions)const;
 
 
     private:
