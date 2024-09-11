@@ -22,7 +22,7 @@ void Executor::ParseData(WebParserConfig* config, std::string key) const
 {
     auto webData = config->GetDataInfo(key);
 
-    std::string txt = _downloader->GetTextFromWeb(webData.mainUrl);
+    std::string txt = _downloader->Get(webData.mainUrl);
 
     WebParser* parser = new WebParser(txt);
 

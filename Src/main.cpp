@@ -4,6 +4,7 @@
 #include "WebParserConfig.h"
 #include "Executor.h"
 #include "GeneralConfig.h"
+#include "ChatSender.h"
 
 int main()
 {
@@ -14,8 +15,10 @@ int main()
         && generalConfig->GetValueBool("allow_get_chat_key") 
         && generalConfig->GetValueString("telegram_key").size() != 0)
     {
-        WebConnector* downloader = new WebConnector();
-        downloader->GetTelegramChatID(generalConfig->GetValueString("telegram_key"));
+        WebConnector* webConnector = new WebConnector();
+        ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
+        chatSender->GetChatIDToAllChats();
+        //downloader->GetTelegramChatID(generalConfig->GetValueString("telegram_key"));
     }
 
     

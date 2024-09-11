@@ -29,20 +29,45 @@ size_t write_data(char* data, size_t size, size_t nmemb, void* clientp)
     return realsize;
 }
 
-std::string WebConnector::GetTextFromWeb(const std::string& url) const
+std::string WebConnector::Get(const std::string& url) const
 {
-    std::string result;
+    std::string response;
     CURL* handle = curl_easy_init();
+    curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "GET");
     curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
     curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
-    curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
+    curl_easy_setopt(handle, CURLOPT_WRITEDATA, &response);
     curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
     auto success = curl_easy_perform(handle);
     curl_easy_reset(handle);
 
-    return result;
+    return response;
 }
 
+std::string WebConnector::Post(const std::string& url, const std::string& data) const
+{
+    CURL* handle = curl_easy_init();
+    std::string response;
+
+    curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
+    curl_easy_setopt(handle, CURLOPT_WRITEDATA, &response);
+
+    struct curl_slist* headers = NULL;
+    headers = curl_slist_append(headers, "accept: application/json");
+    //headers = curl_slist_append(headers, "User-Agent: Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)");
+    headers = curl_slist_append(headers, "content-type: application/json");
+    curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headers);
+
+    curl_easy_setopt(handle, CURLOPT_POSTFIELDS, data.c_str());
+
+    CURLcode res = curl_easy_perform(handle); // Realiza la solicitud HTTP
+    curl_easy_reset(handle);
+    assert(res == CURLE_OK);
+
+    return response;
+}
 
 void WebConnector::GetTelegramChatID(const std::string& telegramBotKey)
 {
@@ -64,7 +89,7 @@ void WebConnector::GetTelegramChatID(const std::string& telegramBotKey)
 
         struct curl_slist* headers = NULL;
         headers = curl_slist_append(headers, "accept: application/json");
-        headers = curl_slist_append(headers, "User-Agent: Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)");
+        //headers = curl_slist_append(headers, "User-Agent: Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)");
         headers = curl_slist_append(headers, "content-type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 

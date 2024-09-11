@@ -12,7 +12,9 @@ public:
     ~WebConnector();
 
 public:
-    std::string GetTextFromWeb(const std::string& url) const;
+    std::string Get(const std::string& url) const;
+
+    std::string Post(const std::string& url, const std::string& data) const;
 
     void GetTelegramChatID(const std::string& telegramBotKey);
 
