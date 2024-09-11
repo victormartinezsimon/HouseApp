@@ -34,7 +34,7 @@ int main()
     WebParserConfig* config = new WebParserConfig();
     config->Parse(generalConfig->GetValueString("web_data_location"));
 
-    Database::DatabaseConnector* db = new Database::DatabaseConnector( generalConfig );
+    DatabaseConnector* db = new DatabaseConnector( generalConfig );
 
     Executor* executor = new Executor(db, webConnector);
     executor->Run(config);

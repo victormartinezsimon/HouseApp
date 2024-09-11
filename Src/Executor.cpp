@@ -5,7 +5,7 @@
 #include "WebParser.h"
 #include "Add.h"
 
-Executor::Executor(Database::DatabaseConnector* db, WebConnector* downloader):_db(db), _downloader(downloader) {}
+Executor::Executor(DatabaseConnector* db, WebConnector* downloader):_db(db), _downloader(downloader) {}
 
 
 void Executor::Run(WebParserConfig* config)const
