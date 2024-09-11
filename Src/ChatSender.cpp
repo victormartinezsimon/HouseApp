@@ -11,7 +11,7 @@ using namespace rapidjson;
 
 ChatSender::ChatSender(WebConnector* connector, const std::string& botID) :_connector(connector), _botID(botID) {}
 
-void ChatSender::GetChatIDToAllChats()
+void ChatSender::GetChatIDToAllChats()const
 {
     assert(_botID.size() > 0 && "the bot id is not configurated");
 
@@ -32,7 +32,7 @@ void ChatSender::GetChatIDToAllChats()
     }
 }
 
-void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)
+void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)const
 {
     assert(_botID.size() > 0 && "the bot id is not configurated");
 
@@ -58,16 +58,16 @@ void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)
     _connector->Post(GetUrlForSendMessage(), jsonToSend);
 }
 
-std::string ChatSender::GetUrlForUpdate()
+std::string ChatSender::GetUrlForUpdate()const
 {
     return "https://api.telegram.org/bot" + _botID + "/getUpdates";
 }
-std::string ChatSender::GetUrlForSendMessage()
+std::string ChatSender::GetUrlForSendMessage()const
 {
     return "https://api.telegram.org/bot" + _botID + "/sendMessage";
 }
 
-bool ChatSender::ParseUpdateResult(const std::string& str)
+bool ChatSender::ParseUpdateResult(const std::string& str)const
 {
     Document doc;
     doc.Parse(str.c_str());

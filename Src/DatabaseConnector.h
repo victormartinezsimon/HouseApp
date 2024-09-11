@@ -28,20 +28,20 @@ namespace Database
         DatabaseConnector(GeneralConfig* config);
         ~DatabaseConnector();
 
-        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price);
-        std::vector<AdStruct> GetAllAds();
+        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price)const;
+        std::vector<AdStruct> GetAllAds()const;
 
     private:
         void Init_database();
-        void Create_tables();
+        void Create_tables()const;
 
-        void CreateAdsTable();
-        size_t GetHash(const std::string& url, const std::string& source, const std::string& price);
-        void InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash);
-        bool ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions);
-        bool IsHashOnDB(const size_t hash);
-        AdStruct GetHashElement(const size_t hash);
-        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions);
+        void CreateAdsTable()const;
+        size_t GetHash(const std::string& url, const std::string& source, const std::string& price)const;
+        void InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash)const;
+        bool ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions)const;
+        bool IsHashOnDB(const size_t hash)const;
+        AdStruct GetHashElement(const size_t hash)const;
+        bool TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions)const;
 
 
     private:

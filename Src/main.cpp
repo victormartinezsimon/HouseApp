@@ -6,7 +6,7 @@
 #include "GeneralConfig.h"
 #include "ChatSender.h"
 
-void GetIDForChat(GeneralConfig* generalConfig, WebConnector* webConnector, ChatSender* chatSender)
+void TryGetIDForChat(GeneralConfig* generalConfig, WebConnector* webConnector, ChatSender* chatSender)
 {
     std::string chat_key = generalConfig->GetValueString("chat_key");
     bool allowGetChatKey = generalConfig->GetValueBool("allow_get_chat_key");
@@ -29,14 +29,12 @@ int main()
     WebConnector* webConnector = new WebConnector();
     ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
     
-    
-    GetIDForChat(generalConfig, webConnector, chatSender);
+    TryGetIDForChat(generalConfig, webConnector, chatSender);
     
     WebParserConfig* config = new WebParserConfig();
     config->Parse(generalConfig->GetValueString("web_data_location"));
 
     Database::DatabaseConnector* db = new Database::DatabaseConnector( generalConfig );
-   
 
     Executor* executor = new Executor(db, webConnector);
     executor->Run(config);

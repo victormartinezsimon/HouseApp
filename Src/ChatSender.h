@@ -11,13 +11,13 @@ public:
 
 public:
 
-    void GetChatIDToAllChats();
-    void SendMessage(const std::string& chatID, const std::string& msg);
+    void GetChatIDToAllChats()const;
+    void SendMessage(const std::string& chatID, const std::string& msg)const;
 
 private:
-    std::string GetUrlForUpdate();
-    std::string GetUrlForSendMessage();
-    bool ParseUpdateResult(const std::string& str);
+    std::string GetUrlForUpdate() const;
+    std::string GetUrlForSendMessage()const;
+    bool ParseUpdateResult(const std::string& str)const;
 
 private:
 

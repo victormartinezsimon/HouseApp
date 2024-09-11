@@ -27,12 +27,12 @@ namespace Database
        }
     }
 
-    void DatabaseConnector::Create_tables()
+    void DatabaseConnector::Create_tables()const
     {
         CreateAdsTable();
     }
 
-    void DatabaseConnector::CreateAdsTable()
+    void DatabaseConnector::CreateAdsTable()const
     {
         std::string sql = "";
         sql += "CREATE TABLE IF NOT EXISTS ADS(";
@@ -50,7 +50,7 @@ namespace Database
         assert(SQLite::OK== result);
     }
 
-    void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash)
+    void DatabaseConnector::InsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash)const
     {
         std::string sql = "";
         sql += "INSERT INTO ADS (URL,SOURCE,PRICE,HASH,CREATION_DATE,UPDATE_DATE,AVAILABLE ) ";
@@ -68,7 +68,7 @@ namespace Database
         assert(SQLite::OK == result);
     }
 
-    std::vector<AdStruct> DatabaseConnector::GetAllAds()
+    std::vector<AdStruct> DatabaseConnector::GetAllAds()const
     {
         std::vector<AdStruct> toReturn;
 
@@ -96,14 +96,14 @@ namespace Database
         return toReturn;
     }
 
-    size_t DatabaseConnector::GetHash(const std::string& url, const std::string& source, const std::string& price)
+    size_t DatabaseConnector::GetHash(const std::string& url, const std::string& source, const std::string& price)const
     {
         std::string str = url + "_" + source + "_" + price;
         auto sol = std::hash<std::string>{}(str);
         return sol;
     }
 
-    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price)
+    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price)const
     {
         auto hash = GetHash(url, source, price);
 
@@ -111,7 +111,7 @@ namespace Database
 
     }
 
-    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions)
+    bool DatabaseConnector::TryInsertAd(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int currentCollisions)const
     {
         if (currentCollisions == 0)
         {
@@ -133,7 +133,7 @@ namespace Database
         return false;
     }
 
-    bool DatabaseConnector::IsHashOnDB(const size_t hash)
+    bool DatabaseConnector::IsHashOnDB(const size_t hash)const
     {
         std::string sql = "SELECT * from ADS";
         sql += " where hash = \"" + std::to_string(hash) + "\"";
@@ -147,7 +147,7 @@ namespace Database
         return false;
     }
    
-    AdStruct DatabaseConnector::GetHashElement(const size_t hash)
+    AdStruct DatabaseConnector::GetHashElement(const size_t hash)const
     {
         std::string sql = "SELECT ID, URL, SOURCE, AVAILABLE, PRICE from ADS";
         sql += " where hash = \"" + std::to_string(hash) + "\"";
@@ -176,7 +176,7 @@ namespace Database
         return toReturn;
     }
 
-    bool DatabaseConnector::ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions)
+    bool DatabaseConnector::ManageHashCollision(const std::string& url, const std::string& source, const std::string& price, const size_t hash, int totalCollisions)const
     {
         auto onDB = GetHashElement(hash);
 
