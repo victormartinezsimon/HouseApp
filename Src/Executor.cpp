@@ -1,10 +1,10 @@
 #include "Executor.h"
 #include "DatabaseConnector.h"
 #include "WebParserConfig.h"
-#include "WebDownloader.h"
+#include "WebConnector.h"
 #include "WebParser.h"
 
-Executor::Executor(Database::DatabaseConnector* db, WebDownloader* downloader):_db(db), _downloader(downloader) {}
+Executor::Executor(Database::DatabaseConnector* db, WebConnector* downloader):_db(db), _downloader(downloader) {}
 
 
 void Executor::Run(WebParserConfig* config)

@@ -3,13 +3,13 @@
 #include <string>
 #include <functional>
 
-class WebDownloader
+class WebConnector
 {
     using DownloaderCallback = std::function<void(const std::string&)>;
 
 public:
-    WebDownloader();
-    ~WebDownloader();
+    WebConnector();
+    ~WebConnector();
 
 public:
     std::string GetTextFromWeb(const std::string& url) const;

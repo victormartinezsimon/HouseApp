@@ -1,4 +1,4 @@
-#include "WebDownloader.h"
+#include "WebConnector.h"
 #include <curl/curl.h>
 #include <assert.h>
 
@@ -8,12 +8,12 @@
 
 using namespace rapidjson;
 
-WebDownloader::WebDownloader()
+WebConnector::WebConnector()
 {
     // initialize curl globally
     curl_global_init(CURL_GLOBAL_ALL);
 }
-WebDownloader::~WebDownloader()
+WebConnector::~WebConnector()
 {
     // free up the global curl resources
     curl_global_cleanup();
@@ -29,7 +29,7 @@ size_t write_data(char* data, size_t size, size_t nmemb, void* clientp)
     return realsize;
 }
 
-std::string WebDownloader::GetTextFromWeb(const std::string& url) const
+std::string WebConnector::GetTextFromWeb(const std::string& url) const
 {
     std::string result;
     CURL* handle = curl_easy_init();
@@ -44,7 +44,7 @@ std::string WebDownloader::GetTextFromWeb(const std::string& url) const
 }
 
 
-void WebDownloader::GetTelegramChatID(const std::string& telegramBotKey)
+void WebConnector::GetTelegramChatID(const std::string& telegramBotKey)
 {
     bool messageSend = false;
 
@@ -100,7 +100,7 @@ void WebDownloader::GetTelegramChatID(const std::string& telegramBotKey)
     }
 }
 
-void WebDownloader::WriteTelegramMessage(const std::string& telegramBotKey, const std::string& chatID, const std::string& msg)
+void WebConnector::WriteTelegramMessage(const std::string& telegramBotKey, const std::string& chatID, const std::string& msg)
 {
     const std::string messageURL = "https://api.telegram.org/bot" + telegramBotKey + "/sendMessage?chat_id=" + chatID + "&text=" + msg;
 

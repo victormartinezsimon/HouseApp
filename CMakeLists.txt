@@ -25,7 +25,7 @@ endif()
 set(SOURCES
     src/main.cpp
     src/DatabaseConnector.cpp
-    src/WebDownloader.cpp
+    src/WebConnector.cpp
     src/WebParserConfig.cpp
     src/Executor.cpp
     src/WebParser.cpp
@@ -34,7 +34,7 @@ set(SOURCES
 
 set(HEADERS
     src/DatabaseConnector.h
-    src/WebDownloader.h
+    src/WebConnector.h
     src/WebParserConfig.h
     src/Executor.h
     src/WebParser.h
