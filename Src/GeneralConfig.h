@@ -16,7 +16,7 @@ public:
 
 private:
 
-    std::string GetValueAsString(rapidjson::Value& value);
+    std::string GetValueAsString(rapidjson::Value& value)const;
 
     std::map< std::string, std::string> _params;
 };

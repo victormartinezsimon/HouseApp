@@ -7,7 +7,7 @@
 Executor::Executor(Database::DatabaseConnector* db, WebConnector* downloader):_db(db), _downloader(downloader) {}
 
 
-void Executor::Run(WebParserConfig* config)
+void Executor::Run(WebParserConfig* config)const
 {
     auto allKeys = config->GetAllKeys();
 

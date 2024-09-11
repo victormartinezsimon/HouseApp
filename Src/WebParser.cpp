@@ -16,7 +16,7 @@ WebParser::~WebParser()
 }
 
 
-std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData)
+std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData)const
 {
     std::vector<std::map<std::string, std::string>> result;
 

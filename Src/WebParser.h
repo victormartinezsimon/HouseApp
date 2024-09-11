@@ -14,7 +14,7 @@ public:
     WebParser(const std::string& str);
     ~WebParser();
 
-    std::vector<std::map<std::string, std::string>> Parse(const WebParserConfig::WebData& webData);
+    std::vector<std::map<std::string, std::string>> Parse(const WebParserConfig::WebData& webData)const;
 
 private:
     xmlXPathContextPtr context;

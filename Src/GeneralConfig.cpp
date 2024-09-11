@@ -24,7 +24,7 @@ void GeneralConfig::Parse(const std::string& path)
     }
 }
 
-std::string GeneralConfig::GetValueAsString(rapidjson::Value& value)
+std::string GeneralConfig::GetValueAsString(rapidjson::Value& value)const
 {
     if (value.IsBool())
     {

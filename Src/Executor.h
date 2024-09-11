@@ -15,7 +15,7 @@ public:
     Executor(Database::DatabaseConnector* db, WebConnector* downloader);
     ~Executor();
 
-    void Run(WebParserConfig* config);
+    void Run(WebParserConfig* config)const;
 
 private:
 
