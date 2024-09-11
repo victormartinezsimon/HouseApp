@@ -44,9 +44,8 @@ set(HEADERS
 # Crea un grupo para los archivos .h en Visual Studio
 source_group("Headers" FILES ${HEADERS})
 
-
 # Añade el ejecutable
-add_executable(HouseApp ${SOURCES} ${HEADERS})
+add_executable(HouseApp ${SOURCES} ${HEADERS} ${TELEGRAM})
 
 # Incluir directorios de cabeceras
 target_include_directories(HouseApp PUBLIC ${PROJECT_SOURCE_DIR}/include)
@@ -77,5 +76,4 @@ find_package(LibXml2 REQUIRED)
 target_link_libraries(HouseApp PRIVATE LibXml2::LibXml2)
 
 find_package(RapidJSON CONFIG REQUIRED)
-  target_link_libraries(HouseApp PRIVATE rapidjson)
-
+target_link_libraries(HouseApp PRIVATE rapidjson)

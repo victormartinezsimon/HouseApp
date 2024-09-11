@@ -2,6 +2,8 @@
     "use_hash_collision" : true,
     "max_collisions": 10,
     "telegram_key": "",
+    "chat_key":"",
+    "allow_get_chat_key": true, 
     "use_threads": false, 
     "web_data_location": "config/web_data.json"
 }
