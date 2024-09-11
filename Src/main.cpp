@@ -36,7 +36,7 @@ int main()
 
     DatabaseConnector* db = new DatabaseConnector( generalConfig );
 
-    Executor* executor = new Executor(db, webConnector);
+    Executor* executor = new Executor(generalConfig, db, webConnector);
     executor->Run(config);
     
     return 0;
