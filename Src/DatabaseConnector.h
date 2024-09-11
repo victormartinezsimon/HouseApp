@@ -10,7 +10,6 @@ class GeneralConfig;
 
 namespace Database
 {
-    constexpr std::string_view databaseFile = "./example.db";
 
     struct AdStruct
     {
@@ -49,5 +48,6 @@ namespace Database
         GeneralConfig* _config;
         int _maxCollisions = 10;
         bool _use_hash_collision = false;
+        std::string _dataBasePath = "";
     };
 }

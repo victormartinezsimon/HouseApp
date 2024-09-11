@@ -10,11 +10,12 @@ namespace Database
         Create_tables();
         _maxCollisions = _config->GetValueInt("max_collisions");
         _use_hash_collision = _config->GetValueBool("use_hash_collision");
+        _dataBasePath = _config->GetValueString("database_path");
     }
 
     void DatabaseConnector::Init_database()
     {
-        DB = new SQLite::Database(databaseFile.data(), SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
+        DB = new SQLite::Database(_dataBasePath.data(), SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
         assert(DB != nullptr);
     }
 
