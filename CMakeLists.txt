@@ -31,6 +31,7 @@ set(SOURCES
     src/WebParser.cpp
     src/GeneralConfig.cpp
     src/ChatSender.cpp
+    src/Add.cpp
 )
 
 set(HEADERS
@@ -41,6 +42,7 @@ set(HEADERS
     src/WebParser.h
     src/GeneralConfig.h
     src/ChatSender.h
+    src/Add.h
 )
 
 # Crea un grupo para los archivos .h en Visual Studio

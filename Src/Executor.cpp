@@ -3,6 +3,7 @@
 #include "WebParserConfig.h"
 #include "WebConnector.h"
 #include "WebParser.h"
+#include "Add.h"
 
 Executor::Executor(Database::DatabaseConnector* db, WebConnector* downloader):_db(db), _downloader(downloader) {}
 
@@ -33,6 +34,10 @@ void Executor::ParseData(WebParserConfig* config, std::string key) const
         auto url = r["url"];
         auto price = r["price"];
         auto source = webData.id;
+
+        Add* add = new Add();
+        add->BuildAdd(r);
+        add->source = webData.id;
 
         _db->TryInsertAd(url, source, price);
     }
