@@ -12,7 +12,6 @@ public:
 public:
 
     void GetChatIDToAllChats();
-
     void SendMessage(const std::string& chatID, const std::string& msg);
 
 private:
@@ -22,8 +21,8 @@ private:
 
 private:
 
-    WebConnector* _connector;
-    std::string _botID;
+    WebConnector* _connector = nullptr;
+    std::string _botID =  "";
 
     const std::string jsonForUpdate = "{\"offset\":null,\"limit\":null,\"timeout\":null}";
 };

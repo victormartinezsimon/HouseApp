@@ -13,6 +13,7 @@ ChatSender::ChatSender(WebConnector* connector, const std::string& botID) :_conn
 
 void ChatSender::GetChatIDToAllChats()
 {
+    assert(_botID.size() > 0 && "the bot id is not configurated");
 
     bool idKnow = false;
 
@@ -33,6 +34,8 @@ void ChatSender::GetChatIDToAllChats()
 
 void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)
 {
+    assert(_botID.size() > 0 && "the bot id is not configurated");
+
     Document d; 
     d.SetObject();
 

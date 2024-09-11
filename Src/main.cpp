@@ -6,29 +6,39 @@
 #include "GeneralConfig.h"
 #include "ChatSender.h"
 
+void GetIDForChat(GeneralConfig* generalConfig, WebConnector* webConnector, ChatSender* chatSender)
+{
+    std::string chat_key = generalConfig->GetValueString("chat_key");
+    bool allowGetChatKey = generalConfig->GetValueBool("allow_get_chat_key");
+    std::string telegramKey = generalConfig->GetValueString("telegram_key");
+
+    if (chat_key.size() == 0
+        && allowGetChatKey
+        )
+    {
+        chatSender->GetChatIDToAllChats();
+    }
+}
+
+
 int main()
 {
     GeneralConfig* generalConfig = new GeneralConfig();
     generalConfig->Parse("config/general_config.json");
 
-    if (generalConfig->GetValueString("chat_key").size() == 0 
-        && generalConfig->GetValueBool("allow_get_chat_key") 
-        && generalConfig->GetValueString("telegram_key").size() != 0)
-    {
-        WebConnector* webConnector = new WebConnector();
-        ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
-        chatSender->GetChatIDToAllChats();
-        //downloader->GetTelegramChatID(generalConfig->GetValueString("telegram_key"));
-    }
-
+    WebConnector* webConnector = new WebConnector();
+    ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
+    
+    
+    GetIDForChat(generalConfig, webConnector, chatSender);
     
     WebParserConfig* config = new WebParserConfig();
     config->Parse(generalConfig->GetValueString("web_data_location"));
 
     Database::DatabaseConnector* db = new Database::DatabaseConnector( generalConfig );
-    WebConnector* downloader = new WebConnector();
+   
 
-    Executor* executor = new Executor(db, downloader);
+    Executor* executor = new Executor(db, webConnector);
     executor->Run(config);
     
     return 0;
