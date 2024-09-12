@@ -17,6 +17,7 @@ public:
 
     bool TryInsertAd(const Add& add, size_t& hashAdded)const;
     std::vector<Add> GetAllAds()const;
+    Add GetHashElement(const size_t hash)const;
 
 private:
     void Init_database();
@@ -27,7 +28,7 @@ private:
     void InsertAd(const Add& add, const size_t hash)const;
     bool ManageHashCollision(const Add& add, const size_t hash, int totalCollisions, size_t& hashAdded)const;
     bool IsHashOnDB(const size_t hash)const;
-    Add GetHashElement(const size_t hash)const;
+    
     bool TryInsertAd(const Add& add, const size_t hash, int currentCollisions, size_t& hashAdded)const;
 
 

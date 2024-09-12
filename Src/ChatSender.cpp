@@ -11,17 +11,19 @@ using namespace rapidjson;
 
 ChatSender::ChatSender(WebConnector* connector, const std::string& botID) :_connector(connector), _botID(botID) {}
 
-void ChatSender::GetChatIDToAllChats()const
+std::string ChatSender::GetChatIDToAllChats()const
 {
     assert(_botID.size() > 0 && "the bot id is not configurated");
 
     bool idKnow = false;
 
+    std::string chatID;
+
     while (!idKnow)
     {
         auto dataDownloaded = _connector->Post(GetUrlForUpdate(), jsonForUpdate);
 
-        if (ParseUpdateResult(dataDownloaded))
+        if (ParseUpdateResult(dataDownloaded, chatID))
         {
             idKnow = true;
         }
@@ -30,6 +32,8 @@ void ChatSender::GetChatIDToAllChats()const
             std::this_thread::sleep_for(std::chrono::milliseconds(2000));
         }
     }
+
+    return chatID;
 }
 
 void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)const
@@ -45,8 +49,12 @@ void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)c
     Value chat_id;
     chat_id.SetString(chatID.c_str(), chatID.size());
 
+    Value parse_mode;
+    parse_mode.SetString("html", 4);
+
     d.AddMember("text", text, d.GetAllocator());
     d.AddMember("chat_id", chat_id, d.GetAllocator());
+    d.AddMember("parse_mode", parse_mode, d.GetAllocator());
 
     StringBuffer buffer;
     Writer<StringBuffer> writer(buffer);
@@ -67,7 +75,7 @@ std::string ChatSender::GetUrlForSendMessage()const
     return "https://api.telegram.org/bot" + _botID + "/sendMessage";
 }
 
-bool ChatSender::ParseUpdateResult(const std::string& str)const
+bool ChatSender::ParseUpdateResult(const std::string& str, std::string& idToReturn)const
 {
     Document doc;
     doc.Parse(str.c_str());
@@ -82,11 +90,13 @@ bool ChatSender::ParseUpdateResult(const std::string& str)const
             auto result = resultArray[i].Get<rapidjson::GenericObject<true, rapidjson::Value>>();
             auto message = result["message"].Get<rapidjson::GenericObject<true, rapidjson::Value>>();
             auto chat = message["chat"].Get<rapidjson::GenericObject<true, rapidjson::Value>>();
-            auto id = chat["id"].GetInt64();
+            auto chatID = std::to_string(chat["id"].GetInt64());
 
-            std::string messageToSend = "The ID for this chat is: " + std::to_string(id);
+            std::string messageToSend = "The ID for this chat is: " + chatID;
 
-            SendMessage(std::to_string(id), messageToSend);
+            SendMessage(chatID, messageToSend);
+
+            idToReturn = chatID;
         }
     }
 

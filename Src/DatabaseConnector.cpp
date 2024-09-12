@@ -124,7 +124,7 @@ bool DatabaseConnector::TryInsertAd(const Add& add, const size_t hash, int curre
     {
         InsertAd(add, hash);
         hashAdded = hash;
-        return false;
+        return true;
     }
 
     if (_use_hash_collision)

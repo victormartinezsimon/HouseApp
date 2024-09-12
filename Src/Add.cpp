@@ -22,3 +22,30 @@ bool Add::operator==(const Add& otherAdd) const
 {
     return otherAdd.url == url && otherAdd.price == price && otherAdd.source == source;
 }
+
+std::string Add::PrintPrettyHtml()
+{
+    std::string result = "";
+
+    if (!url.empty())
+    {
+        result += "<b>url: </b>" + url +"\n";
+    }
+
+    if (!price.empty())
+    {
+        result += "<b>price: </b>" + price + "\n";
+    }
+
+    if (!source.empty())
+    {
+        result += "<b>source: </b>" + source + "\n";
+    }
+    
+    if (!result.empty())
+    {
+        result = separator + result + separator;
+    }
+
+    return result;
+}
