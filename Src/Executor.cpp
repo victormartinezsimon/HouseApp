@@ -6,8 +6,9 @@
 #include "Add.h"
 #include "GeneralConfig.h"
 #include <thread>
+#include <future>
 
-Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader):_db(db), _downloader(downloader), _generalConfig(generalConfig) {}
+Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader) :_db(db), _downloader(downloader), _generalConfig(generalConfig) {}
 
 Executor::~Executor()
 {
@@ -16,47 +17,54 @@ Executor::~Executor()
     _generalConfig = nullptr;
 }
 
-void Executor::Run(WebParserConfig* config)const
+std::vector<size_t> Executor::Run(WebParserConfig* config)const
 {
     if (_generalConfig->GetValueBool("use_threads"))
     {
-        RunThreads(config);
+        return RunThreads(config);
     }
     else
     {
-        RunIterative(config);
+        return RunIterative(config);
     }
 }
 
-void Executor::RunIterative(WebParserConfig* config) const
+std::vector<size_t> Executor::RunIterative(WebParserConfig* config) const
 {
     auto allKeys = config->GetAllKeys();
 
+    std::vector<size_t> newHashes;
+
     for (auto&& key : allKeys)
     {
-        ParseData(config, key);
-    }
-}
-void Executor::RunThreads(WebParserConfig* config)const
-{
-    std::vector<std::thread> allThreads;
+        auto toAdd = ParseData(config, key);
 
+        newHashes.insert(newHashes.end(), toAdd.begin(), toAdd.end());
+    }
+    return newHashes;
+}
+std::vector<size_t> Executor::RunThreads(WebParserConfig* config)const
+{
     auto allKeys = config->GetAllKeys();
 
+    std::vector<size_t> newHashes;
+
+    std::vector<std::future<std::vector<size_t>>> futuresToWait;
+
     for (auto&& key : allKeys)
     {
-        allThreads.push_back(std::thread (&Executor::ParseData, this, config, key));
+        futuresToWait.push_back(std::async(std::launch::async, &Executor::ParseData, this, config, key));
     }
 
-
-    for (auto& t : allThreads)
-    {
-        t.join();
+    for (size_t i = 0; i < futuresToWait.size(); ++i) {
+        auto hashesToAdd = futuresToWait[i].get();
+        newHashes.insert(newHashes.end(), hashesToAdd.begin(), hashesToAdd.end());
     }
+    return newHashes;
 }
 
 
-void Executor::ParseData(WebParserConfig* config, std::string key) const
+std::vector<size_t> Executor::ParseData(WebParserConfig* config, std::string key) const
 {
     auto webData = config->GetDataInfo(key);
 
@@ -65,6 +73,8 @@ void Executor::ParseData(WebParserConfig* config, std::string key) const
     WebParser* parser = new WebParser(txt);
 
     auto result = parser->Parse(webData);
+
+    std::vector<size_t> newHashAdded;
 
     for (auto&& r : result)
     {
@@ -76,6 +86,12 @@ void Executor::ParseData(WebParserConfig* config, std::string key) const
         add.BuildAdd(r);
         add.source = webData.id;
 
-        _db->TryInsertAd(add);
+        size_t hashAdded;
+
+        if (_db->TryInsertAd(add, hashAdded))
+        {
+            newHashAdded.push_back(hashAdded);
+        }
     }
+    return newHashAdded;
 }

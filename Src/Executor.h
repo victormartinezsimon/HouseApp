@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 class DatabaseConnector;
 class WebConnector;
@@ -13,14 +14,14 @@ public:
     Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader);
     ~Executor();
 
-    void Run(WebParserConfig* config)const;
+    std::vector<size_t> Run(WebParserConfig* config)const;
 
 private:
 
-    void RunIterative(WebParserConfig* config) const;
-    void RunThreads(WebParserConfig* config) const;
+    std::vector<size_t> RunIterative(WebParserConfig* config) const;
+    std::vector<size_t> RunThreads(WebParserConfig* config) const;
 
-    void ParseData(WebParserConfig* config, std::string key) const;
+    std::vector<size_t> ParseData(WebParserConfig* config, std::string key) const;
 
     DatabaseConnector* _db;
     WebConnector* _downloader;

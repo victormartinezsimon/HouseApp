@@ -10,10 +10,15 @@ void Add::BuildAdd(const std::map<std::string, std::string>& data)
 
 std::string Add::GetMapValue(const std::map<std::string, std::string>& data, const std::string& key) const
 {
-    if (data.find("url") != data.end())
+    if (data.find(key) != data.end())
     {
-        return data.at("url");;
+        return data.at(key);;
     }
 
     return "";
+}
+
+bool Add::operator==(const Add& otherAdd) const
+{
+    return otherAdd.url == url && otherAdd.price == price && otherAdd.source == source;
 }

@@ -8,6 +8,7 @@ public:
 
     Add();
     void BuildAdd(const std::map<std::string, std::string>& data);
+    bool operator==(const Add& otherAdd) const;
 
 private:
     std::string GetMapValue(const std::map<std::string, std::string>& data, const std::string& key) const;

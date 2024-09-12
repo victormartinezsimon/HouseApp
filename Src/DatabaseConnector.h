@@ -15,7 +15,7 @@ public:
     DatabaseConnector(GeneralConfig* config);
     ~DatabaseConnector();
 
-    bool TryInsertAd(const Add& add)const;
+    bool TryInsertAd(const Add& add, size_t& hashAdded)const;
     std::vector<Add> GetAllAds()const;
 
 private:
@@ -25,10 +25,10 @@ private:
     void CreateAdsTable()const;
     size_t GetHash(const Add& add)const;
     void InsertAd(const Add& add, const size_t hash)const;
-    bool ManageHashCollision(const Add& add, const size_t hash, int totalCollisions)const;
+    bool ManageHashCollision(const Add& add, const size_t hash, int totalCollisions, size_t& hashAdded)const;
     bool IsHashOnDB(const size_t hash)const;
     Add GetHashElement(const size_t hash)const;
-    bool TryInsertAd(const Add& add, const size_t hash, int currentCollisions)const;
+    bool TryInsertAd(const Add& add, const size_t hash, int currentCollisions, size_t& hashAdded)const;
 
 
 private:

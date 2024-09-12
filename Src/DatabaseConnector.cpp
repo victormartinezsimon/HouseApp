@@ -104,15 +104,15 @@ size_t DatabaseConnector::GetHash(const Add& add)const
     return sol;
 }
 
-bool DatabaseConnector::TryInsertAd(const Add& add)const
+bool DatabaseConnector::TryInsertAd(const Add& add, size_t& hashAdded)const
 {
     auto hash = GetHash(add);
 
-    return TryInsertAd(add, hash, _maxCollisions);
+    return TryInsertAd(add, hash, _maxCollisions, hashAdded);
 
 }
 
-bool DatabaseConnector::TryInsertAd(const Add& add, const size_t hash, int currentCollisions)const
+bool DatabaseConnector::TryInsertAd(const Add& add, const size_t hash, int currentCollisions, size_t& hashAdded)const
 {
     if (currentCollisions == 0)
     {
@@ -123,12 +123,13 @@ bool DatabaseConnector::TryInsertAd(const Add& add, const size_t hash, int curre
     if (!IsHashOnDB(hash))
     {
         InsertAd(add, hash);
-        return true;
+        hashAdded = hash;
+        return false;
     }
 
     if (_use_hash_collision)
     {
-        return ManageHashCollision(add, hash, _maxCollisions);
+        return ManageHashCollision(add, hash, _maxCollisions, hashAdded);
     }
 
     return false;
@@ -177,23 +178,16 @@ Add DatabaseConnector::GetHashElement(const size_t hash)const
     return toReturn;
 }
 
-bool DatabaseConnector::ManageHashCollision(const Add& add, const size_t hash, int totalCollisions)const
+bool DatabaseConnector::ManageHashCollision(const Add& add, const size_t hash, int totalCollisions, size_t& hashAdded)const
 {
     auto onDB = GetHashElement(hash);
 
-    bool same = true;
-
-    same &= (onDB.url == add.url);
-    same &= (onDB.source == add.source);
-    same &= (onDB.price == add.price);
-
-    size_t newHash = hash + 1;
-
-    if (same)
+    if (add == onDB)
     {
         return false;
     }
 
-    return TryInsertAd(add, newHash, totalCollisions - 1);
+    size_t newHash = hash + 1;
+    return TryInsertAd(add, newHash, totalCollisions - 1, hashAdded);
 }
 
