@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
+message(STATUS "command for cmake")
+message(STATUS "cmake -DCMAKE_TOOLCHAIN_FILE=/home/pi/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake ..")
+
 # Nombre del proyecto
 project(my_project)
 
