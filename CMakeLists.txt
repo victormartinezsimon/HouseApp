@@ -9,26 +9,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Añade los archivos fuente y de cabecera
 set(SOURCES
-    src/main.cpp
-    src/DatabaseConnector.cpp
-    src/WebConnector.cpp
-    src/WebParserConfig.cpp
-    src/Executor.cpp
-    src/WebParser.cpp
-    src/GeneralConfig.cpp
-    src/ChatSender.cpp
-    src/Add.cpp
+    Src/main.cpp
+    Src/DatabaseConnector.cpp
+    Src/WebConnector.cpp
+    Src/WebParserConfig.cpp
+    Src/Executor.cpp
+    Src/WebParser.cpp
+    Src/GeneralConfig.cpp
+    Src/ChatSender.cpp
+    Src/Add.cpp
 )
 
 set(HEADERS
-    src/DatabaseConnector.h
-    src/WebConnector.h
-    src/WebParserConfig.h
-    src/Executor.h
-    src/WebParser.h
-    src/GeneralConfig.h
-    src/ChatSender.h
-    src/Add.h
+    Src/DatabaseConnector.h
+    Src/WebConnector.h
+    Src/WebParserConfig.h
+    Src/Executor.h
+    Src/WebParser.h
+    Src/GeneralConfig.h
+    Src/ChatSender.h
+    Src/Add.h
 )
 
 
