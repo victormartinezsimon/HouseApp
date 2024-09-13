@@ -4,7 +4,7 @@ message(STATUS "command for cmake")
 message(STATUS "cmake -DCMAKE_TOOLCHAIN_FILE=/home/pi/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake ..")
 
 # Nombre del proyecto
-project(my_project)
+project(houseApp)
 
 # Establecer el estándar de C++
 set(CMAKE_CXX_STANDARD 20)
@@ -63,10 +63,10 @@ if (WIN32)
     source_group("Headers" FILES ${HEADERS})
 
     # Añade el ejecutable
-    add_executable(my_project ${SOURCES} ${HEADERS} )
+    add_executable(houseApp ${SOURCES} ${HEADERS} )
 
     # Vincular bibliotecas en Windows
-    target_link_libraries(my_project ${CURL_LIBRARIES} SQLiteCpp ${LIBXML2_LIBRARIES} ${WINDOWS_LIBS})
+    target_link_libraries(houseApp ${CURL_LIBRARIES} SQLiteCpp ${LIBXML2_LIBRARIES} ${WINDOWS_LIBS})
 
 elseif (UNIX)
 
@@ -82,10 +82,10 @@ elseif (UNIX)
     endif()
 
     # Añade el ejecutable
-    add_executable(my_project ${SOURCES} ${HEADERS} )
+    add_executable(houseApp ${SOURCES} ${HEADERS} )
 
     # Vincular bibliotecas en Linux
-    target_link_libraries(my_project ${CURL_LIBRARIES} SQLiteCpp ${LIBXML2_LIBRARIES} ${PLATFORM_LIBS})
+    target_link_libraries(houseApp ${CURL_LIBRARIES} SQLiteCpp ${LIBXML2_LIBRARIES} ${PLATFORM_LIBS})
 
 endif()
 
@@ -94,7 +94,7 @@ include_directories(${RAPIDJSON_INCLUDE_DIRS})
 
 
 # Especificar el uso de C++17
-target_compile_features(my_project PRIVATE cxx_std_20)
+target_compile_features(houseApp PRIVATE cxx_std_20)
 
 # Especifica la carpeta fuente y la carpeta de destino
 set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/config")
