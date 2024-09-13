@@ -97,8 +97,8 @@ include_directories(${RAPIDJSON_INCLUDE_DIRS})
 target_compile_features(my_project PRIVATE cxx_std_20)
 
 # Especifica la carpeta fuente y la carpeta de destino
-set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/Config")
-set(DESTINATION_DIR "${CMAKE_BINARY_DIR}")
+set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/config")
+set(DESTINATION_DIR "${CMAKE_BINARY_DIR}/config")
 
 # Comando para copiar los archivos de source_dir a destination_dir
 file(COPY "${SOURCE_DIR}" DESTINATION "${DESTINATION_DIR}")

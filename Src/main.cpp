@@ -44,7 +44,7 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
 int main()
 {
     GeneralConfig* generalConfig = new GeneralConfig();
-    generalConfig->Parse("Config/general_config.json");
+    generalConfig->Parse("config/general_config.json");
 
     WebConnector* webConnector = new WebConnector();
     ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
