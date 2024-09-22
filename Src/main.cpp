@@ -22,7 +22,7 @@ std::string TryGetIDForChat(GeneralConfig* generalConfig, WebConnector* webConne
     return chat_key;
 }
 
-void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender* chatSender, std::string& chatID)
+void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender* chatSender, std::string& chatID, Log* log)
 {
     std::string msg = "";
 
@@ -36,8 +36,13 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
 
     if (!msg.empty() && !chatID.empty())
     {
+        log->WriteLog("###Sending new message###");
         msg = "New Finds: \n" + msg;
         chatSender->SendMessage(chatID, msg);
+    }
+    else
+    {
+        log->WriteLog("###Nothing new was found###");
     }
 }
 
@@ -67,7 +72,7 @@ int main()
     auto hashesAdded = executor->Run(config);
     
     log->WriteLog("Sending new data");
-    SendNewData(hashesAdded, db, chatSender, chat_key);
+    SendNewData(hashesAdded, db, chatSender, chat_key, log);
     
     log->WriteLog("Finish!!");
     return 0;
