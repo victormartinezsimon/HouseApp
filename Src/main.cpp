@@ -63,7 +63,7 @@ int main()
     DatabaseConnector* db = new DatabaseConnector( generalConfig, log );
 
     log->WriteLog("Launching executor");
-    Executor* executor = new Executor(generalConfig, db, webConnector);
+    Executor* executor = new Executor(generalConfig, db, webConnector, log);
     auto hashesAdded = executor->Run(config);
     
     log->WriteLog("Sending new data");

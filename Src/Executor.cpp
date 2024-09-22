@@ -7,14 +7,16 @@
 #include "GeneralConfig.h"
 #include <thread>
 #include <future>
+#include "Log.h"
 
-Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader) :_db(db), _downloader(downloader), _generalConfig(generalConfig) {}
+Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader, Log* log) :_db(db), _downloader(downloader), _generalConfig(generalConfig),_log(log) {}
 
 Executor::~Executor()
 {
     _db = nullptr;
     _downloader = nullptr;
     _generalConfig = nullptr;
+    _log = nullptr;
 }
 
 std::vector<size_t> Executor::Run(WebParserConfig* config)const
@@ -66,6 +68,8 @@ std::vector<size_t> Executor::RunThreads(WebParserConfig* config)const
 
 std::vector<size_t> Executor::ParseData(WebParserConfig* config, std::string key) const
 {
+    _log->WriteLog("searching for: " + key);
+
     auto webData = config->GetDataInfo(key);
 
     std::string txt = _downloader->Get(webData.mainUrl);
@@ -93,5 +97,8 @@ std::vector<size_t> Executor::ParseData(WebParserConfig* config, std::string key
             newHashAdded.push_back(hashAdded);
         }
     }
+
+    _log->WriteLog("finish searching for: " + key);
+
     return newHashAdded;
 }
