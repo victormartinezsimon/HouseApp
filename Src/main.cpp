@@ -36,13 +36,13 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
 
     if (!msg.empty() && !chatID.empty())
     {
-        log->WriteLog("###Sending new message###");
+        log->WriteLog("###Sending new message###", Log::LOG_TYPE::LOG_NORMAL);
         msg = "New Finds: \n" + msg;
         chatSender->SendMessage(chatID, msg);
     }
     else
     {
-        log->WriteLog("###Nothing new was found###");
+        log->WriteLog("###Nothing new was found###", Log::LOG_TYPE::LOG_NORMAL);
     }
 }
 
@@ -50,6 +50,7 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
 int main()
 {
     Log* log = new Log();
+    log->WriteLog("Start system", Log::LOG_TYPE::LOG_NORMAL);
 
     log->WriteLog("Reading general config");
     GeneralConfig* generalConfig = new GeneralConfig(log);
@@ -74,6 +75,6 @@ int main()
     log->WriteLog("Sending new data");
     SendNewData(hashesAdded, db, chatSender, chat_key, log);
     
-    log->WriteLog("Finish!!");
+    log->WriteLog("Finish!!", Log::LOG_TYPE::LOG_NORMAL);
     return 0;
 }

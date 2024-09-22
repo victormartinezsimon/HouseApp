@@ -10,6 +10,11 @@ void  Log::WriteLog(const std::string& log, LOG_TYPE type)
 
     switch (type)
     {
+    case Log::LOG_TYPE::LOG_LOW:
+#if _DEBUG
+        std::cout << msg;
+#endif
+        break;
     case Log::LOG_TYPE::LOG_NORMAL:
         std::cout << msg;
         break;
