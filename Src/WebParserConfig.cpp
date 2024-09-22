@@ -1,4 +1,5 @@
 #include "WebParserConfig.h"
+#include "Log.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -6,9 +7,10 @@
 
 using namespace rapidjson;
 
+WebParserConfig::WebParserConfig(Log* log):_log(log) {}
+
 void WebParserConfig::Parse(const std::string& path)
 {
-
     FILE* fp = fopen(path.c_str(), "r"); // non-Windows use "r"
 
     char readBuffer[65536];
@@ -20,7 +22,10 @@ void WebParserConfig::Parse(const std::string& path)
 
     for (auto& v : doc.GetArray())
     {
-        assert(v.IsObject());
+        if (!v.IsObject())
+        {
+            _log->WriteLog("Some error while parsing the web data", Log::LOG_TYPE::LOG_FATAL);
+        }
 
         WebData webData;
 

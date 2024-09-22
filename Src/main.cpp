@@ -57,7 +57,7 @@ int main()
     std::string chat_key = TryGetIDForChat(generalConfig, webConnector, chatSender);
     
     log->WriteLog("Read web parser config");
-    WebParserConfig* config = new WebParserConfig();
+    WebParserConfig* config = new WebParserConfig(log);
     config->Parse(generalConfig->GetValueString("web_data_location"));
 
     DatabaseConnector* db = new DatabaseConnector( generalConfig );
