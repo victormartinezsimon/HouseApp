@@ -72,8 +72,15 @@ int main()
     Executor* executor = new Executor(generalConfig, db, webConnector, log);
     auto hashesAdded = executor->Run(config);
     
-    log->WriteLog("Sending new data");
-    SendNewData(hashesAdded, db, chatSender, chat_key, log);
+    if (generalConfig->GetValueBool("send_telegram_data", false))
+    {
+        log->WriteLog("Sending new data");
+        SendNewData(hashesAdded, db, chatSender, chat_key, log);
+    }
+    else
+    {
+        log->WriteLog("Sending new data is disabled");
+    }
     
     log->WriteLog("Finish!!", Log::LOG_TYPE::LOG_NORMAL);
     return 0;

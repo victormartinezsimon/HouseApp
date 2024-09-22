@@ -22,12 +22,12 @@ void GeneralConfig::Parse(const std::string& path)
     {
         std::string key = m.name.GetString();
 
-        std::string value = GetValueAsString(m.value);
+        std::string value = SaveValueAsString(m.value);
         _params.insert({ key, value });
     }
 }
 
-std::string GeneralConfig::GetValueAsString(rapidjson::Value& value)const
+std::string GeneralConfig::SaveValueAsString(rapidjson::Value& value)const
 {
     if (value.IsBool())
     {
@@ -47,20 +47,22 @@ std::string GeneralConfig::GetValueAsString(rapidjson::Value& value)const
     return value.GetString();
 }
 
-std::string GeneralConfig::GetValueString(const std::string& key) const
+std::string GeneralConfig::GetValueString(const std::string& key, const std::string& defaultValue) const
 {
     if (_params.find(key) == _params.end())
     {
-        _log->WriteLog("key: " + key + " missing on GetValueString()", Log::LOG_TYPE::LOG_ERROR);
+        _log->WriteLog("key: " + key + " missing on GetValueString()", Log::LOG_TYPE::LOG_NORMAL);
+        return defaultValue;
     }
     return _params.at(key);
 }
 
-int GeneralConfig::GetValueInt(const std::string& key) const
+int GeneralConfig::GetValueInt(const std::string& key, int defaultValue) const
 {
     if (_params.find(key) == _params.end())
     {
-        _log->WriteLog("key: " + key + " missing on GetValueInt()", Log::LOG_TYPE::LOG_ERROR);
+        _log->WriteLog("key: " + key + " missing on GetValueInt()", Log::LOG_TYPE::LOG_NORMAL);
+        return defaultValue;
     }
 
     auto value = _params.at(key);
@@ -68,11 +70,12 @@ int GeneralConfig::GetValueInt(const std::string& key) const
 
 
 }
-bool GeneralConfig::GetValueBool(const std::string& key) const
+bool GeneralConfig::GetValueBool(const std::string& key, bool defaultValue) const
 {
     if (_params.find(key) == _params.end())
     {
-        _log->WriteLog("key: " + key + " missing on GetValueBool()", Log::LOG_TYPE::LOG_ERROR);
+        _log->WriteLog("key: " + key + " missing on GetValueBool()", Log::LOG_TYPE::LOG_NORMAL);
+        return defaultValue;
     }
 
     auto value = _params.at(key);

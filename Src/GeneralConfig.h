@@ -13,13 +13,13 @@ class GeneralConfig
 public:
     GeneralConfig(Log*);
     void Parse(const std::string& path);
-    std::string GetValueString(const std::string& key) const;
-    int GetValueInt(const std::string& key) const;
-    bool GetValueBool(const std::string& key) const;
+    std::string GetValueString(const std::string& key, const std::string& defaultValue = "") const;
+    int GetValueInt(const std::string& key, int defaultValue = 0) const;
+    bool GetValueBool(const std::string& key, bool defaultValue = false) const;
 
 private:
 
-    std::string GetValueAsString(rapidjson::Value& value)const;
+    std::string SaveValueAsString(rapidjson::Value& value)const;
 
     std::map< std::string, std::string> _params;
 
