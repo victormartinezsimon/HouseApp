@@ -1,19 +1,24 @@
 #include "ChatSender.h"
 #include "WebConnector.h"
+#include "Log.h"
 #include <chrono>
 #include <thread>
 
-#include <assert.h>
+
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include <rapidjson/writer.h>
 using namespace rapidjson;
 
-ChatSender::ChatSender(WebConnector* connector, const std::string& botID) :_connector(connector), _botID(botID) {}
+ChatSender::ChatSender(WebConnector* connector, const std::string& botID, Log* log) :_connector(connector), _botID(botID), _log(log) {}
 
 std::string ChatSender::GetChatIDToAllChats()const
 {
-    assert(_botID.size() > 0 && "the bot id is not configurated");
+    if (_botID.empty())
+    {
+        _log->WriteLog("the bot id is not configurated", Log::LOG_TYPE::LOG_ERROR);
+        return "";
+    }
 
     bool idKnow = false;
 
@@ -38,7 +43,11 @@ std::string ChatSender::GetChatIDToAllChats()const
 
 void ChatSender::SendMessage(const std::string& chatID, const std::string& msg)const
 {
-    assert(_botID.size() > 0 && "the bot id is not configurated");
+    if (_botID.empty())
+    {
+        _log->WriteLog("the bot id is not configurated", Log::LOG_TYPE::LOG_ERROR);
+        return;
+    }
 
     Document d; 
     d.SetObject();
@@ -80,7 +89,12 @@ bool ChatSender::ParseUpdateResult(const std::string& str, std::string& idToRetu
     Document doc;
     doc.Parse(str.c_str());
 
-    assert(doc["result"].IsArray());
+    if (!doc["result"].IsArray())
+    {
+        _log->WriteLog("Result is not an array", Log::LOG_TYPE::LOG_FATAL);
+        return false;
+    }
+
     auto resultArray = doc["result"].GetArray();
 
     if (resultArray.Size() != 0)

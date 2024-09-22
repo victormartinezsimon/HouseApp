@@ -51,7 +51,7 @@ int main()
     generalConfig->Parse("config/general_config.json");
 
     WebConnector* webConnector = new WebConnector(log);
-    ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
+    ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"), log);
     
     log->WriteLog("Try to get chat key");
     std::string chat_key = TryGetIDForChat(generalConfig, webConnector, chatSender);

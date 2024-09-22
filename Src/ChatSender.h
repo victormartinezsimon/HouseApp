@@ -2,12 +2,13 @@
 #include <string>
 
 class WebConnector;
+class Log;
 
 class ChatSender
 {
 public:
 
-    ChatSender(WebConnector* connector, const std::string& botID);
+    ChatSender(WebConnector* connector, const std::string& botID, Log* log);
 
 public:
 
@@ -23,6 +24,7 @@ private:
 
     WebConnector* _connector = nullptr;
     std::string _botID =  "";
+    Log* _log;
 
     const std::string jsonForUpdate = "{\"offset\":null,\"limit\":null,\"timeout\":null}";
 };
