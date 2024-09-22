@@ -44,25 +44,31 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
 
 int main()
 {
-    Log* l = new Log();
+    Log* log = new Log();
 
-    GeneralConfig* generalConfig = new GeneralConfig();
+    log->WriteLog("Reading general config");
+    GeneralConfig* generalConfig = new GeneralConfig(log);
     generalConfig->Parse("config/general_config.json");
 
     WebConnector* webConnector = new WebConnector();
     ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
     
+    log->WriteLog("Try to get chat key");
     std::string chat_key = TryGetIDForChat(generalConfig, webConnector, chatSender);
     
+    log->WriteLog("Read web parser config");
     WebParserConfig* config = new WebParserConfig();
     config->Parse(generalConfig->GetValueString("web_data_location"));
 
     DatabaseConnector* db = new DatabaseConnector( generalConfig );
 
+    log->WriteLog("Launching executor");
     Executor* executor = new Executor(generalConfig, db, webConnector);
     auto hashesAdded = executor->Run(config);
     
+    log->WriteLog("Sending new data");
     SendNewData(hashesAdded, db, chatSender, chat_key);
     
+    log->WriteLog("Finish!!");
     return 0;
 }

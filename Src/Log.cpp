@@ -6,8 +6,6 @@
 void  Log::WriteLog(const std::string& log, LOG_TYPE type)
 {
     auto time = GetFormattedTime();
-    std::cout << "[" << time << "]: " << log << "\n";
-
     std::string msg = "[" + time + "]: " + log + "\n";
 
     switch (type)

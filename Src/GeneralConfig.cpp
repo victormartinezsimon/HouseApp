@@ -1,9 +1,12 @@
 #include "GeneralConfig.h"
 
+#include "Log.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/filereadstream.h"
 
 using namespace rapidjson;
+
+GeneralConfig::GeneralConfig(Log* log) : _log(log) {}
 
 void GeneralConfig::Parse(const std::string& path)
 {
@@ -46,13 +49,19 @@ std::string GeneralConfig::GetValueAsString(rapidjson::Value& value)const
 
 std::string GeneralConfig::GetValueString(const std::string& key) const
 {
-    assert(_params.find(key) != _params.end());
+    if (_params.find(key) == _params.end())
+    {
+        _log->WriteLog("key: " + key + " missing on GetValueString()", Log::LOG_TYPE::ERROR);
+    }
     return _params.at(key);
 }
 
 int GeneralConfig::GetValueInt(const std::string& key) const
 {
-    assert(_params.find(key) != _params.end());
+    if (_params.find(key) == _params.end())
+    {
+        _log->WriteLog("key: " + key + " missing on GetValueInt()", Log::LOG_TYPE::ERROR);
+    }
 
     auto value = _params.at(key);
     return atoi(value.c_str());
@@ -61,7 +70,10 @@ int GeneralConfig::GetValueInt(const std::string& key) const
 }
 bool GeneralConfig::GetValueBool(const std::string& key) const
 {
-    assert(_params.find(key) != _params.end());
+    if (_params.find(key) == _params.end())
+    {
+        _log->WriteLog("key: " + key + " missing on GetValueBool()", Log::LOG_TYPE::ERROR);
+    }
 
     auto value = _params.at(key);
     

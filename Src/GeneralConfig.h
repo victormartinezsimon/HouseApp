@@ -5,10 +5,13 @@
 
 #include "rapidjson/document.h"
 
+class Log;
+
 class GeneralConfig
 {
 
 public:
+    GeneralConfig(Log*);
     void Parse(const std::string& path);
     std::string GetValueString(const std::string& key) const;
     int GetValueInt(const std::string& key) const;
@@ -19,4 +22,6 @@ private:
     std::string GetValueAsString(rapidjson::Value& value)const;
 
     std::map< std::string, std::string> _params;
+
+    Log* _log;
 };
