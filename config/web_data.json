@@ -1,18 +1,41 @@
 [
     {
-        "id": "test",
-        "main_url": "https://www.scrapingcourse.com/ecommerce/",
-        "main_path": "//li[contains(@class, 'product')]",
+        "id": "solagua.hogaresgroup.es",
+        "main_url": "https://www.solagua.hogaresgroup.es/",
+        "main_path_1": "//section[contains(@class, 'paginacion-ficha-bloque1')]",
+        "main_path_2": "//*[contains(@class, 'paginacion-contenido')]",
+        "main_path": "//article[contains(@class, 'paginacion-ficha')]",
         "data_to_extract": [
             {
                 "id": "url",
-                "path": ".//a",
+                "path": ".//a[contains(@class, 'irAfichaPropiedad')]",
                 "data_extractor": "href"
             },
             {
                 "id": "price",
-                "path": ".//a/span",
-                "data_extractor": ""
+                "path": ".//span[contains(@class, 'paginacion-ficha-tituloprecio')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ]
+    },
+    {
+        "id": "leganeszarzaquemada.hogaresgroup.es/",
+        "main_url": "https://www.leganeszarzaquemada.hogaresgroup.es/",
+        "main_path_1": "//section[contains(@class, 'paginacion-ficha-bloque1')]",
+        "main_path_2": "//*[contains(@class, 'paginacion-contenido')]",
+        "main_path": "//article[contains(@class, 'paginacion-ficha')]",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a[contains(@class, 'irAfichaPropiedad')]",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//span[contains(@class, 'paginacion-ficha-tituloprecio')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
             }
         ]
     }

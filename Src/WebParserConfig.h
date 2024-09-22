@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <functional>
 
 class Log;
 
@@ -14,6 +15,7 @@ public:
         std::string id;
         std::string path;
         std::string data_extractor;
+        std::string data_parse_function;
     };
 
     struct WebData

@@ -3,10 +3,18 @@
 
 //code from: https://www.zenrows.com/blog/c-plus-plus-web-scraping#parse-gtml-data
 
+
+
+
 WebParser::WebParser(const std::string& str)
 {
     doc = htmlReadMemory(str.c_str(), str.length(), nullptr, nullptr, HTML_PARSE_NOERROR);
     context = xmlXPathNewContext(doc);
+
+    parseFunctions.insert({ "extract_first_number", 
+                                [this](const std::string& str) {return this->extract_first_number(str); }
+                                }
+                        );
 }
 
 WebParser::~WebParser()
@@ -16,7 +24,7 @@ WebParser::~WebParser()
 }
 
 
-std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData)const
+std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData) const
 {
     std::vector<std::map<std::string, std::string>> result;
 
@@ -52,6 +60,11 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
                 value = std::string(reinterpret_cast<char*>(xmlGetProp(html_element, (xmlChar*)data_extractor.c_str())));
             }
 
+            if (!data.data_parse_function.empty())
+            {
+                value = parseFunctions.at(data.data_parse_function)(value);
+            }
+
             infoExtracted.insert({ key, value });
         }
 
@@ -59,4 +72,17 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
     }
 
     return result;
+}
+
+
+std::string WebParser::extract_first_number(std::string const& str)
+{
+    char const* digits = "0123456789.";
+    std::size_t const n = str.find_first_of(digits);
+    if (n != std::string::npos)
+    {
+        std::size_t const m = str.find_first_not_of(digits, n);
+        return str.substr(n, m != std::string::npos ? m - n : m);
+    }
+    return std::string();
 }

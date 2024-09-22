@@ -42,7 +42,12 @@ void WebParserConfig::Parse(const std::string& path)
             std::string id_dataInfo = data["id"].GetString();
             std::string path = data["path"].GetString();
             std::string data_extractor = data["data_extractor"].GetString();
-            webData.dataInfo.insert({ id_dataInfo, { id_dataInfo, path, data_extractor } });
+            std::string data_parse_function = "";
+            if (data.HasMember("data_parse_function"))
+            {
+                data_parse_function = data["data_parse_function"].GetString();
+            }
+            webData.dataInfo.insert({ id_dataInfo, { id_dataInfo, path, data_extractor, data_parse_function } });
         }
 
         _webData.insert({ webData.id , webData });
