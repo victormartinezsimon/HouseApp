@@ -1,10 +1,10 @@
 #include "DatabaseConnector.h"
-#include <cassert>
 #include "GeneralConfig.h"
 #include "Add.h"
+#include "Log.h"
 
 
-DatabaseConnector::DatabaseConnector(GeneralConfig* config):_config(config)
+DatabaseConnector::DatabaseConnector(GeneralConfig* config, Log* log):_config(config), _log(log)
 {
     _maxCollisions = _config->GetValueInt("max_collisions");
     _use_hash_collision = _config->GetValueBool("use_hash_collision");
@@ -16,7 +16,10 @@ DatabaseConnector::DatabaseConnector(GeneralConfig* config):_config(config)
 void DatabaseConnector::Init_database()
 {
     DB = new SQLite::Database(_dataBasePath.data(), SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
-    assert(DB != nullptr);
+    if (DB == nullptr)
+    {
+        _log->WriteLog("Failure on Init_database", Log::LOG_TYPE::LOG_FATAL);
+    }
 }
 
 DatabaseConnector::~DatabaseConnector()
@@ -48,7 +51,11 @@ void DatabaseConnector::CreateAdsTable()const
     sql += ");";
         
     int result = DB->tryExec(sql);
-    assert(SQLite::OK== result);
+
+    if (SQLite::OK != result)
+    {
+        _log->WriteLog("Failure on CreateAdsTable", Log::LOG_TYPE::LOG_FATAL);
+    }
 }
 
 void DatabaseConnector::InsertAd(const Add& add, const size_t hash)const
@@ -66,7 +73,10 @@ void DatabaseConnector::InsertAd(const Add& add, const size_t hash)const
     sql += ")";
         
     int result = DB->tryExec(sql);
-    assert(SQLite::OK == result);
+    if (SQLite::OK != result)
+    {
+        _log->WriteLog("Failure on InsertAd: " +  sql, Log::LOG_TYPE::LOG_ERROR);
+    }
 }
 
 std::vector<Add> DatabaseConnector::GetAllAds()const
@@ -116,7 +126,7 @@ bool DatabaseConnector::TryInsertAd(const Add& add, const size_t hash, int curre
 {
     if (currentCollisions == 0)
     {
-        assert(false && "limit collisions reached");
+        _log->WriteLog("limit collisions reached", Log::LOG_TYPE::LOG_ERROR);
         return false;
     }
 
@@ -173,7 +183,7 @@ Add DatabaseConnector::GetHashElement(const size_t hash)const
     }
     else
     {
-        assert(false && "hash element should exist. Search before call this method");
+        _log->WriteLog("hash element should exist. Search before call this method", Log::LOG_TYPE::LOG_ERROR);
     }
     return toReturn;
 }

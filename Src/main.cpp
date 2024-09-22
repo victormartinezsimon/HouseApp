@@ -60,7 +60,7 @@ int main()
     WebParserConfig* config = new WebParserConfig(log);
     config->Parse(generalConfig->GetValueString("web_data_location"));
 
-    DatabaseConnector* db = new DatabaseConnector( generalConfig );
+    DatabaseConnector* db = new DatabaseConnector( generalConfig, log );
 
     log->WriteLog("Launching executor");
     Executor* executor = new Executor(generalConfig, db, webConnector);

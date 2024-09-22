@@ -8,11 +8,12 @@
 
 class GeneralConfig;
 class Add;
+class Log;
 
 class DatabaseConnector
 {
 public:
-    DatabaseConnector(GeneralConfig* config);
+    DatabaseConnector(GeneralConfig* config, Log* log);
     ~DatabaseConnector();
 
     bool TryInsertAd(const Add& add, size_t& hashAdded)const;
@@ -38,4 +39,5 @@ private:
     int _maxCollisions = 10;
     bool _use_hash_collision = false;
     std::string _dataBasePath = "";
+    Log* _log;
 };
