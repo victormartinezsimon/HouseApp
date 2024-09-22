@@ -6,6 +6,7 @@
 #include "GeneralConfig.h"
 #include "ChatSender.h"
 #include "Add.h"
+#include "Log.h"
 
 std::string TryGetIDForChat(GeneralConfig* generalConfig, WebConnector* webConnector, ChatSender* chatSender)
 {
@@ -43,6 +44,8 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
 
 int main()
 {
+    Log* l = new Log();
+
     GeneralConfig* generalConfig = new GeneralConfig();
     generalConfig->Parse("config/general_config.json");
 
@@ -60,6 +63,6 @@ int main()
     auto hashesAdded = executor->Run(config);
     
     SendNewData(hashesAdded, db, chatSender, chat_key);
-
+    
     return 0;
 }

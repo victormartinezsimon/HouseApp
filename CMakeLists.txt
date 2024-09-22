@@ -21,6 +21,7 @@ set(SOURCES
     Src/GeneralConfig.cpp
     Src/ChatSender.cpp
     Src/Add.cpp
+    Src/Log.cpp
 )
 
 set(HEADERS
@@ -32,6 +33,7 @@ set(HEADERS
     Src/GeneralConfig.h
     Src/ChatSender.h
     Src/Add.h
+    Src/Log.h
 )
 
 set(CMAKE_CXX_STANDARD 20)
