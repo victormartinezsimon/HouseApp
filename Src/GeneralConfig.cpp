@@ -51,7 +51,7 @@ std::string GeneralConfig::GetValueString(const std::string& key) const
 {
     if (_params.find(key) == _params.end())
     {
-        _log->WriteLog("key: " + key + " missing on GetValueString()", Log::LOG_TYPE::ERROR);
+        _log->WriteLog("key: " + key + " missing on GetValueString()", Log::LOG_TYPE::LOG_ERROR);
     }
     return _params.at(key);
 }
@@ -60,7 +60,7 @@ int GeneralConfig::GetValueInt(const std::string& key) const
 {
     if (_params.find(key) == _params.end())
     {
-        _log->WriteLog("key: " + key + " missing on GetValueInt()", Log::LOG_TYPE::ERROR);
+        _log->WriteLog("key: " + key + " missing on GetValueInt()", Log::LOG_TYPE::LOG_ERROR);
     }
 
     auto value = _params.at(key);
@@ -72,7 +72,7 @@ bool GeneralConfig::GetValueBool(const std::string& key) const
 {
     if (_params.find(key) == _params.end())
     {
-        _log->WriteLog("key: " + key + " missing on GetValueBool()", Log::LOG_TYPE::ERROR);
+        _log->WriteLog("key: " + key + " missing on GetValueBool()", Log::LOG_TYPE::LOG_ERROR);
     }
 
     auto value = _params.at(key);

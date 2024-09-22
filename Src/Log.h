@@ -7,15 +7,15 @@ class Log
 public:
 	enum class  LOG_TYPE
 	{
-		NORMAL,
-		ERROR,
-		FATAL
+		LOG_NORMAL,
+		LOG_ERROR,
+		LOG_FATAL,
 	};
 
 
 public:
 
-    void WriteLog(const std::string& log, LOG_TYPE type = LOG_TYPE::NORMAL);
+    void WriteLog(const std::string& log, LOG_TYPE type = LOG_TYPE::LOG_NORMAL);
 
 private:
 	std::string GetFormattedTime();

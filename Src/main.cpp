@@ -50,7 +50,7 @@ int main()
     GeneralConfig* generalConfig = new GeneralConfig(log);
     generalConfig->Parse("config/general_config.json");
 
-    WebConnector* webConnector = new WebConnector();
+    WebConnector* webConnector = new WebConnector(log);
     ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"));
     
     log->WriteLog("Try to get chat key");

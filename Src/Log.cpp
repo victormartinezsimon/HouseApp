@@ -10,20 +10,19 @@ void  Log::WriteLog(const std::string& log, LOG_TYPE type)
 
     switch (type)
     {
-    case Log::LOG_TYPE::NORMAL:
+    case Log::LOG_TYPE::LOG_NORMAL:
         std::cout << msg;
         break;
-    case Log::LOG_TYPE::ERROR:
+    case Log::LOG_TYPE::LOG_ERROR:
         std::cerr << msg;
 
 #if _DEBUG
         assert(false && msg.c_str());
 #endif
-
         break;
-    case Log::LOG_TYPE::FATAL:
+    case Log::LOG_TYPE::LOG_FATAL:
         std::cerr << msg;
-        
+        assert(false && msg.c_str());
         break;
     }
 

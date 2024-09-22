@@ -1,6 +1,6 @@
 #include "WebConnector.h"
 #include <curl/curl.h>
-#include <assert.h>
+#include "Log.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -8,7 +8,7 @@
 
 using namespace rapidjson;
 
-WebConnector::WebConnector()
+WebConnector::WebConnector(Log* log):_log(log)
 {
     // initialize curl globally
     curl_global_init(CURL_GLOBAL_ALL);
@@ -38,8 +38,13 @@ std::string WebConnector::Get(const std::string& url) const
     curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(handle, CURLOPT_WRITEDATA, &response);
     curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
-    auto success = curl_easy_perform(handle);
+    auto res = curl_easy_perform(handle);
     curl_easy_reset(handle);
+
+    if (res != CURLE_OK)
+    {
+        _log->WriteLog("error in Get: " + url, Log::LOG_TYPE::LOG_FATAL);
+    }
 
     return response;
 }
@@ -64,7 +69,11 @@ std::string WebConnector::Post(const std::string& url, const std::string& data) 
 
     CURLcode res = curl_easy_perform(handle); // Realiza la solicitud HTTP
     curl_easy_reset(handle);
-    assert(res == CURLE_OK);
+
+    if (res != CURLE_OK)
+    {
+        _log->WriteLog("error in Post: " + url, Log::LOG_TYPE::LOG_FATAL);
+    }
 
     return response;
 }
