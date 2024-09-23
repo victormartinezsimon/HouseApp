@@ -96,7 +96,7 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
 
     WebParser* parser = new WebParser(txt);
 
-    auto result = parser->Parse(webData);
+    auto result = parser->Parse(webData, url);
 
     std::vector<size_t> newHashAdded;
 

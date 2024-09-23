@@ -1,14 +1,14 @@
 [
     {
         "id": "hogaresgroup",
-        "main_url": "https://www.solagua.hogaresgroup.es/",
         "main_urls": ["https://www.solagua.hogaresgroup.es/","https://www.leganeszarzaquemada.hogaresgroup.es/"],
         "main_path": "//article[contains(@class, 'paginacion-ficha')]",
         "data_to_extract": [
             {
                 "id": "url",
                 "path": ".//a[contains(@class, 'irAfichaPropiedad')]",
-                "data_extractor": "href"
+                "data_extractor": "href",
+                "data_parse_function": "join_with_url"
             },
             {
                 "id": "price",

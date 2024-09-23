@@ -11,10 +11,9 @@ WebParser::WebParser(const std::string& str)
     doc = htmlReadMemory(str.c_str(), str.length(), nullptr, nullptr, HTML_PARSE_NOERROR);
     context = xmlXPathNewContext(doc);
 
-    parseFunctions.insert({ "extract_first_number", 
-                                [this](const std::string& str) {return this->extract_first_number(str); }
-                                }
-                        );
+    parseFunctions.insert({ "extract_first_number",[this](const WebParserConfig::WebData& webData, const std::string& url, const std::string& value) {return this->extract_first_number(webData, url, value); } });
+
+    parseFunctions.insert({ "join_with_url",[this](const WebParserConfig::WebData& webData, const std::string& url, const std::string& value) {return this->join_with_url(webData, url, value); } });
 }
 
 WebParser::~WebParser()
@@ -24,7 +23,7 @@ WebParser::~WebParser()
 }
 
 
-std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData) const
+std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData, const std::string& url) const
 {
     std::vector<std::map<std::string, std::string>> result;
 
@@ -62,7 +61,7 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
 
             if (!data.data_parse_function.empty())
             {
-                value = parseFunctions.at(data.data_parse_function)(value);
+                value = parseFunctions.at(data.data_parse_function)(webData, url, value);
             }
 
             infoExtracted.insert({ key, value });
@@ -75,14 +74,19 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
 }
 
 
-std::string WebParser::extract_first_number(std::string const& str)
+std::string WebParser::extract_first_number(const WebParserConfig::WebData& webData, const std::string& url, const std::string& value)
 {
     char const* digits = "0123456789.";
-    std::size_t const n = str.find_first_of(digits);
+    std::size_t const n = value.find_first_of(digits);
     if (n != std::string::npos)
     {
-        std::size_t const m = str.find_first_not_of(digits, n);
-        return str.substr(n, m != std::string::npos ? m - n : m);
+        std::size_t const m = value.find_first_not_of(digits, n);
+        return value.substr(n, m != std::string::npos ? m - n : m);
     }
     return std::string();
+}
+
+std::string WebParser::join_with_url(const WebParserConfig::WebData& webData, const std::string& url, const std::string& value)
+{
+    return url + value;
 }
