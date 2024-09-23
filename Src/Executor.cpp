@@ -135,9 +135,9 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
     return newHashAdded;
 }
 
-bool Executor::OnlyLeganesNorteFilter(const Add* str)
+bool Executor::OnlyLeganesNorteFilter(const Add* add)
 {
-    return true;
+    return add->url.find("norte") != std::string::npos;
 }
 bool Executor::BigPrizesFilter(const Add* add)
 {
