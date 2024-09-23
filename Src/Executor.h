@@ -1,12 +1,15 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
+#include <functional>
 
 class DatabaseConnector;
 class WebConnector;
 class WebParserConfig;
 class GeneralConfig;
 class Log;
+class Add;
 
 class Executor
 {
@@ -25,8 +28,13 @@ private:
     std::vector<size_t> ParseData(WebParserConfig* config, const std::string& key) const;
     std::vector<size_t> ParseDataWithUrl(WebParserConfig* config, const std::string& key, const std::string& url) const;
 
+    bool OnlyLeganesNorteFilter(const Add* str);
+    bool BigPrizesFilter(const Add* str);
+
     DatabaseConnector* _db;
     WebConnector* _downloader;
     GeneralConfig* _generalConfig;
     Log* _log;
+
+    std::map<std::string, std::function<bool(const Add* )>> filterFunctions;
 };

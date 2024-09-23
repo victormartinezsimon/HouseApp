@@ -38,6 +38,14 @@ void WebParserConfig::Parse(const std::string& path)
             webData.mainUrls.push_back(url_str);
         }
 
+        if (v.HasMember("filter_functions"))
+        {
+            for (auto& fun : v["filter_functions"].GetArray())
+            {
+                std::string filterFun = fun.GetString();
+                webData.filterFunctions.push_back(filterFun);
+            }
+        }
 
         const Value& data_to_extract = v["data_to_extract"];
         assert(data_to_extract.IsArray());

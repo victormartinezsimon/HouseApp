@@ -24,6 +24,7 @@ public:
         std::vector<std::string> mainUrls;
         std::string mainPath;
         std::map<std::string, DataInfo> dataInfo;
+        std::vector<std::string> filterFunctions;
     };
 
 public:

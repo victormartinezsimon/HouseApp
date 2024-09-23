@@ -9,7 +9,11 @@
 #include <future>
 #include "Log.h"
 
-Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader, Log* log) :_db(db), _downloader(downloader), _generalConfig(generalConfig),_log(log) {}
+Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader, Log* log) :_db(db), _downloader(downloader), _generalConfig(generalConfig),_log(log)
+{
+    filterFunctions.insert({ "only_leganesNorte", [this](const Add* str) {return this->OnlyLeganesNorteFilter(str); } });
+    filterFunctions.insert({ "big_prizes", [this](const Add* str) {return this->BigPrizesFilter(str); } });
+}
 
 Executor::~Executor()
 {
@@ -106,8 +110,22 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
         add.BuildAdd(r);
         add.source = webData.id;
 
-        size_t hashAdded;
+        bool filtersOK = true;
+        for (auto fun : webData.filterFunctions)
+        {
+            if (!filterFunctions.at(fun)(&add))
+            {
+                filtersOK = false;
+                break;
+            }
+        }
 
+        if (!filtersOK)
+        {
+            continue;
+        }
+
+        size_t hashAdded;
         if (_db->TryInsertAd(add, hashAdded))
         {
             newHashAdded.push_back(hashAdded);
@@ -115,4 +133,15 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
     }
 
     return newHashAdded;
+}
+
+bool Executor::OnlyLeganesNorteFilter(const Add* str)
+{
+    return true;
+}
+bool Executor::BigPrizesFilter(const Add* add)
+{
+    float priceInt = atof(add->price.c_str());
+
+    return priceInt > 200.000;
 }

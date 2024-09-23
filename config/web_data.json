@@ -16,6 +16,7 @@
                 "data_extractor": "",
                 "data_parse_function": "extract_first_number"
             }
-        ]
+        ],
+        "filter_functions":["big_prizes"]
     }
 ]
