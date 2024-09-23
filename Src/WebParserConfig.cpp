@@ -30,8 +30,14 @@ void WebParserConfig::Parse(const std::string& path)
         WebData webData;
 
         webData.id = v["id"].GetString();
-        webData.mainUrl = v["main_url"].GetString();
         webData.mainPath = v["main_path"].GetString();
+
+        for (auto& url : v["main_urls"].GetArray())
+        {
+            std::string url_str = url.GetString();
+            webData.mainUrls.push_back(url_str);
+        }
+
 
         const Value& data_to_extract = v["data_to_extract"];
         assert(data_to_extract.IsArray());

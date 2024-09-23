@@ -66,13 +66,29 @@ std::vector<size_t> Executor::RunThreads(WebParserConfig* config)const
 }
 
 
-std::vector<size_t> Executor::ParseData(WebParserConfig* config, std::string key) const
+std::vector<size_t> Executor::ParseData(WebParserConfig* config, const std::string& key) const
 {
     _log->WriteLog("searching for: " + key);
 
     auto webData = config->GetDataInfo(key);
 
-    std::string txt = _downloader->Get(webData.mainUrl);
+    std::vector<size_t> newHashAdded;
+    for (auto&& url : webData.mainUrls)
+    {
+        auto newHashesTemp = ParseDataWithUrl(config, key, url);
+        newHashAdded.insert(newHashAdded.end(), newHashesTemp.begin(), newHashesTemp.end());
+    }
+
+    _log->WriteLog("finish searching for: " + key);
+
+    return newHashAdded;
+}
+
+std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const std::string& key, const std::string& url) const
+{
+    auto webData = config->GetDataInfo(key);
+
+    std::string txt = _downloader->Get(url);
 
     WebParser* parser = new WebParser(txt);
 
@@ -97,8 +113,6 @@ std::vector<size_t> Executor::ParseData(WebParserConfig* config, std::string key
             newHashAdded.push_back(hashAdded);
         }
     }
-
-    _log->WriteLog("finish searching for: " + key);
 
     return newHashAdded;
 }

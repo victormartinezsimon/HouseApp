@@ -22,7 +22,8 @@ private:
     std::vector<size_t> RunIterative(WebParserConfig* config) const;
     std::vector<size_t> RunThreads(WebParserConfig* config) const;
 
-    std::vector<size_t> ParseData(WebParserConfig* config, std::string key) const;
+    std::vector<size_t> ParseData(WebParserConfig* config, const std::string& key) const;
+    std::vector<size_t> ParseDataWithUrl(WebParserConfig* config, const std::string& key, const std::string& url) const;
 
     DatabaseConnector* _db;
     WebConnector* _downloader;
