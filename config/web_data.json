@@ -1,7 +1,8 @@
 [
     {
         "id": "hogaresgroup",
-        "main_urls": ["https://www.solagua.hogaresgroup.es/","https://www.leganeszarzaquemada.hogaresgroup.es/"],
+        "main_urls": ["https://www.leganescentro.hogaresgroup.es/","https://www.leganesrioja.hogaresgroup.es/", "https://www.sannicasio.hogaresgroup.es/", "https://www.solagua.hogaresgroup.es/", 
+        "https://www.leganeszarzaquemada.hogaresgroup.es/", "https://www.leganespolvoranca.hogaresgroup.es/"],
         "main_path": "//article[contains(@class, 'paginacion-ficha')]",
         "data_to_extract": [
             {
@@ -17,6 +18,6 @@
                 "data_parse_function": "extract_first_number"
             }
         ],
-        "filter_functions":["big_prizes"]
+        "filter_functions":["only_leganesNorte", "big_prizes"]
     }
 ]
