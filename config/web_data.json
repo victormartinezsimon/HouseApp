@@ -14,13 +14,6 @@
         "enabled": false
     },
     {
-        "id": "bancasa",
-        "main_urls": [
-            "https://www.bancasa.es/inmuebles/venta/piso/madrid/leganes/"
-        ],
-        "enabled": false
-    },
-    {
         "id": "grupoeminmobiliaria",
         "main_urls": [
             "https://grupoeminmobiliaria.com/propiedad/?dir_city=Legan%C3%A9s&property-type=&property-category="
@@ -77,6 +70,30 @@
             {
                 "id": "price",
                 "path": ".//li[contains(@class, 'item-price')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ]
+    },
+    {
+        "id": "bancasa",
+        "main_urls": [
+            "https://www.bancasa.es/inmuebles/venta/piso/madrid/leganes/"
+        ],
+        "filter_functions": [
+            "any_leganes",
+            "big_prizes"
+        ],
+        "main_path": "//div[contains(@class, 'title-price')]",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//div[contains(@class, 'price')]",
                 "data_extractor": "",
                 "data_parse_function": "extract_first_number"
             }
