@@ -30,6 +30,9 @@ private:
 
     bool OnlyLeganesNorteFilter(const Add* str);
     bool BigPrizesFilter(const Add* str);
+    bool AnyLeganesFilter(const Add* str);
+
+    std::string to_lower(const std::string& str);
 
     DatabaseConnector* _db;
     WebConnector* _downloader;

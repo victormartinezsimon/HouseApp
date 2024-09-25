@@ -40,6 +40,8 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
 
         std::map<std::string, std::string> infoExtracted;
 
+        bool allValid = true;
+
         for (auto&& param : webData.dataInfo)
         {
             std::string key = param.first;
@@ -49,25 +51,35 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
             auto data_extractor = data.data_extractor;
 
             xmlNodePtr html_element = xmlXPathEvalExpression((xmlChar*)path.c_str(), context)->nodesetval->nodeTab[0];
-            std::string value = "";
-            if (data_extractor == "")
+            if (html_element != nullptr)
             {
-                value = std::string(reinterpret_cast<char*>(xmlNodeGetContent(html_element)));
+                std::string value = "";
+                if (data_extractor == "")
+                {
+                    value = std::string(reinterpret_cast<char*>(xmlNodeGetContent(html_element)));
+                }
+                else
+                {
+                    value = std::string(reinterpret_cast<char*>(xmlGetProp(html_element, (xmlChar*)data_extractor.c_str())));
+                }
+
+                if (!data.data_parse_function.empty())
+                {
+                    value = parseFunctions.at(data.data_parse_function)(webData, url, value);
+                }
+
+                infoExtracted.insert({ key, value });
             }
             else
             {
-                value = std::string(reinterpret_cast<char*>(xmlGetProp(html_element, (xmlChar*)data_extractor.c_str())));
+                allValid = false;
             }
-
-            if (!data.data_parse_function.empty())
-            {
-                value = parseFunctions.at(data.data_parse_function)(webData, url, value);
-            }
-
-            infoExtracted.insert({ key, value });
         }
 
-        result.push_back(infoExtracted);
+        if (allValid)
+        {
+            result.push_back(infoExtracted);
+        }
     }
 
     return result;

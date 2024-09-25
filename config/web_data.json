@@ -19,5 +19,24 @@
             }
         ],
         "filter_functions":["only_leganesNorte", "big_prizes"]
+    },
+    {
+        "id": "hogarideal",
+        "main_urls": ["https://hogarideal.es/estado/venta/", "https://hogarideal.es/estado/venta/page/2/"],
+        "filter_functions":["any_leganes","big_prizes"],
+        "main_path": "//div[contains(@class, 'item-wrap')]",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a[contains(@class, 'btn-primary')]",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//li[contains(@class, 'item-price')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ]
     }
 ]

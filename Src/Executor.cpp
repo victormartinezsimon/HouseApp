@@ -8,11 +8,13 @@
 #include <thread>
 #include <future>
 #include "Log.h"
+#include <algorithm>
 
 Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader, Log* log) :_db(db), _downloader(downloader), _generalConfig(generalConfig),_log(log)
 {
     filterFunctions.insert({ "only_leganesNorte", [this](const Add* str) {return this->OnlyLeganesNorteFilter(str); } });
     filterFunctions.insert({ "big_prizes", [this](const Add* str) {return this->BigPrizesFilter(str); } });
+    filterFunctions.insert({ "any_leganes", [this](const Add* str) {return this->AnyLeganesFilter(str); } });
 }
 
 Executor::~Executor()
@@ -135,13 +137,33 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
     return newHashAdded;
 }
 
+std::string Executor::to_lower(const std::string& str)
+{
+    std::string copy = str;
+    std::transform(copy.begin(), copy.end(), copy.begin(),
+        [](unsigned char c) { return std::tolower(c); });
+    return copy;
+}
+
 bool Executor::OnlyLeganesNorteFilter(const Add* add)
 {
-    return add->url.find("norte") != std::string::npos;
+    auto url_minus = to_lower(add->url);
+    return url_minus.find("norte") != std::string::npos;
 }
 bool Executor::BigPrizesFilter(const Add* add)
 {
-    float priceInt = atof(add->price.c_str());
+    std::string prize = add->price;
+    prize.erase(std::remove(prize.begin(), prize.end(), '.'), prize.end());
+    float priceInt = atof(prize.c_str());
+    auto prize2 = priceInt + 1;
 
-    return priceInt > 200.000;
+    return priceInt > 200000;
+}
+
+bool Executor::AnyLeganesFilter(const Add* add)
+{
+    auto url_minus = to_lower(add->url);
+    bool valid1 = url_minus.find("leganes") != std::string::npos;
+    bool valid2 = url_minus.find("leganés") != std::string::npos;
+    return valid1 || valid2;
 }
