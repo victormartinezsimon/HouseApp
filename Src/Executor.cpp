@@ -79,12 +79,12 @@ std::vector<size_t> Executor::ParseData(WebParserConfig* config, const std::stri
     auto webData = config->GetDataInfo(key);
 
     std::vector<size_t> newHashAdded;
+
     for (auto&& url : webData.mainUrls)
     {
         auto newHashesTemp = ParseDataWithUrl(config, key, url);
         newHashAdded.insert(newHashAdded.end(), newHashesTemp.begin(), newHashesTemp.end());
     }
-
     _log->WriteLog("finish searching for: " + key);
 
     return newHashAdded;

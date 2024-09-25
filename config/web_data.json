@@ -1,8 +1,42 @@
 [
     {
+        "id": "casaltainmobiliaria",
+        "main_urls": [
+            "https://www.casaltainmobiliaria.com/viviendas-en-venta"
+        ],
+        "enabled": false
+    },
+    {
+        "id": "n13inmobiliaria",
+        "main_urls": [
+            "https://www.n13inmobiliaria.es/find/?kind=housing&ordering=&selling=true"
+        ],
+        "enabled": false
+    },
+    {
+        "id": "bancasa",
+        "main_urls": [
+            "https://www.bancasa.es/inmuebles/venta/piso/madrid/leganes/"
+        ],
+        "enabled": false
+    },
+    {
+        "id": "grupoeminmobiliaria",
+        "main_urls": [
+            "https://grupoeminmobiliaria.com/propiedad/?dir_city=Legan%C3%A9s&property-type=&property-category="
+        ],
+        "enabled": false
+    },
+    {
         "id": "hogaresgroup",
-        "main_urls": ["https://www.leganescentro.hogaresgroup.es/","https://www.leganesrioja.hogaresgroup.es/", "https://www.sannicasio.hogaresgroup.es/", "https://www.solagua.hogaresgroup.es/", 
-        "https://www.leganeszarzaquemada.hogaresgroup.es/", "https://www.leganespolvoranca.hogaresgroup.es/"],
+        "main_urls": [
+            "https://www.leganescentro.hogaresgroup.es/",
+            "https://www.leganesrioja.hogaresgroup.es/",
+            "https://www.sannicasio.hogaresgroup.es/",
+            "https://www.solagua.hogaresgroup.es/",
+            "https://www.leganeszarzaquemada.hogaresgroup.es/",
+            "https://www.leganespolvoranca.hogaresgroup.es/"
+        ],
         "main_path": "//article[contains(@class, 'paginacion-ficha')]",
         "data_to_extract": [
             {
@@ -18,12 +52,21 @@
                 "data_parse_function": "extract_first_number"
             }
         ],
-        "filter_functions":["only_leganesNorte", "big_prizes"]
+        "filter_functions": [
+            "only_leganesNorte",
+            "big_prizes"
+        ]
     },
     {
         "id": "hogarideal",
-        "main_urls": ["https://hogarideal.es/estado/venta/", "https://hogarideal.es/estado/venta/page/2/"],
-        "filter_functions":["any_leganes","big_prizes"],
+        "main_urls": [
+            "https://hogarideal.es/estado/venta/",
+            "https://hogarideal.es/estado/venta/page/2/"
+        ],
+        "filter_functions": [
+            "any_leganes",
+            "big_prizes"
+        ],
         "main_path": "//div[contains(@class, 'item-wrap')]",
         "data_to_extract": [
             {

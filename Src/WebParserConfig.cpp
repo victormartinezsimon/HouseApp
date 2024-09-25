@@ -29,6 +29,17 @@ void WebParserConfig::Parse(const std::string& path)
 
         WebData webData;
 
+        bool enabled = true;
+        if (v.HasMember("enabled"))
+        {
+            enabled = v["enabled"].GetBool();
+        }
+
+        if (!enabled)
+        {
+            continue;
+        }
+
         webData.id = v["id"].GetString();
         webData.mainPath = v["main_path"].GetString();
 
@@ -61,6 +72,7 @@ void WebParserConfig::Parse(const std::string& path)
             {
                 data_parse_function = data["data_parse_function"].GetString();
             }
+
             webData.dataInfo.insert({ id_dataInfo, { id_dataInfo, path, data_extractor, data_parse_function } });
         }
 
