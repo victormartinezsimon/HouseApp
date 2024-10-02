@@ -80,6 +80,14 @@ int main()
     else
     {
         log->WriteLog("Sending new data is disabled");
+        if (hashesAdded.size() != 0)
+        {
+            log->WriteLog("If eneabled, the amount of hashes sended will be: " + std::to_string(hashesAdded.size()));
+        }
+        else
+        {
+            log->WriteLog("If eneabled, no hash will be send." );
+        }
     }
     
     log->WriteLog("Finish!!", Log::LOG_TYPE::LOG_NORMAL);

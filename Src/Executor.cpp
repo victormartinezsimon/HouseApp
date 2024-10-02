@@ -80,11 +80,18 @@ std::vector<size_t> Executor::ParseData(WebParserConfig* config, const std::stri
 
     std::vector<size_t> newHashAdded;
 
+    std::vector<std::future<std::vector<size_t>>> futuresToWait;
+
     for (auto&& url : webData.mainUrls)
     {
-        auto newHashesTemp = ParseDataWithUrl(config, key, url);
-        newHashAdded.insert(newHashAdded.end(), newHashesTemp.begin(), newHashesTemp.end());
+        futuresToWait.push_back(std::async(std::launch::async, &Executor::ParseDataWithUrl, this, config, key, url));
     }
+
+    for (size_t i = 0; i < futuresToWait.size(); ++i) {
+        auto hashesToAdd = futuresToWait[i].get();
+        newHashAdded.insert(newHashAdded.end(), hashesToAdd.begin(), hashesToAdd.end());
+    }
+   
     _log->WriteLog("finish searching for: " + key);
 
     return newHashAdded;
