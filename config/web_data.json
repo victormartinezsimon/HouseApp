@@ -98,5 +98,31 @@
                 "data_parse_function": "extract_first_number"
             }
         ]
+    },
+    {
+        "id": "viviendas 365",
+        "main_urls": [
+            "https://www.viviendas365.com/property_city/leganes/",
+            "https://www.viviendas365.com/property_city/carrascal/",
+            "https://www.viviendas365.com/property_city/leganes-centro/",
+            "https://www.viviendas365.com/property_city/zarzaquemada/"
+        ],
+        "filter_functions": [
+            "big_prizes"
+        ],
+        "main_path": "//div[contains(@class, 'property_listing property_unit_type6')]",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//div[contains(@class, 'listing_unit_price_wrapper')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ]
     }
 ]
