@@ -40,6 +40,28 @@ void WebParserConfig::Parse(const std::string& path)
             continue;
         }
 
+        if (v.HasMember("available_days"))
+        {
+            time_t timestamp = time(NULL);
+            struct tm datetime = *localtime(&timestamp);
+            int today = datetime.tm_wday;
+
+            bool anyValidDay = false;
+            for (auto& day : v["available_days"].GetArray())
+            {
+                int validDay = day.GetInt();
+                if (validDay == today)
+                {
+                    anyValidDay = true;
+                }
+            }
+
+            if (!anyValidDay)
+            {
+                continue;
+            }
+        }
+
         webData.id = v["id"].GetString();
         webData.mainPath = v["main_path"].GetString();
 
