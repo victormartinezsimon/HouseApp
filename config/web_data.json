@@ -190,5 +190,29 @@
                 "data_parse_function": "extract_first_number"
             }
         ]
+    },
+    {
+        "id": "Redpiso",
+        "main_urls": [
+            "https://www.redpiso.es/venta-viviendas/madrid/leganes/con-ordenado-por_recientes-desc"
+        ],
+        "main_path": "//div[@class = 'property-list-location'] ",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a[@class = 'item-link']",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//h3",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ],
+        "filter_functions": [
+            "only_leganesNorte",
+            "big_prizes"
+        ]
     }
 ]
