@@ -124,5 +124,71 @@
                 "data_parse_function": "extract_first_number"
             }
         ]
+    },
+    {
+        "id": "tecnocasa All",
+        "main_urls": [
+            "https://leganes1.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes2.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes3.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes4.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes5.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes6.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes8.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes9.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes11.tecnocasa.es/inmuebles-en-venta"
+        ],
+        "filter_functions": [
+            "big_prizes"
+        ],
+        "available_days": [5],
+        "main_path": "//div[@class = 'estate-card']",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a",
+                "data_extractor": "href",
+                "data_parse_function": "join_with_url"
+            },
+            {
+                "id": "price",
+                "path": ".//div[contains(@class, 'estate-card-current-price')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ]
+    },
+    {
+        "id": "tecnocasa Leganes norte",
+        "main_urls": [
+            "https://leganes1.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes2.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes3.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes4.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes5.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes6.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes8.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes9.tecnocasa.es/inmuebles-en-venta",
+            "https://leganes11.tecnocasa.es/inmuebles-en-venta"
+        ],
+        "filter_functions": [
+            "big_prizes",
+            "only_leganesNorte"
+        ],
+        "main_path": "//div[@class = 'estate-card']",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a",
+                "data_extractor": "href",
+                "data_parse_function": "join_with_url"
+            },
+            {
+                "id": "price",
+                "path": ".//div[contains(@class, 'estate-card-current-price')]",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ]
     }
 ]

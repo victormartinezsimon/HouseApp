@@ -1,12 +1,11 @@
 #include "WebParser.h"
 #include "WebParserConfig.h"
+#include "Log.h"
 
 //code from: https://www.zenrows.com/blog/c-plus-plus-web-scraping#parse-gtml-data
 
 
-
-
-WebParser::WebParser(const std::string& str)
+WebParser::WebParser(const std::string& str, Log* log): _log(log)
 {
     doc = htmlReadMemory(str.c_str(), str.length(), nullptr, nullptr, HTML_PARSE_NOERROR);
     context = xmlXPathNewContext(doc);
@@ -21,7 +20,6 @@ WebParser::~WebParser()
     xmlXPathFreeContext(context);
     xmlFreeDoc(doc);
 }
-
 
 std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParserConfig::WebData& webData, const std::string& url) const
 {
@@ -49,6 +47,22 @@ std::vector<std::map<std::string, std::string>> WebParser::Parse(const WebParser
 
             auto path = data.path;
             auto data_extractor = data.data_extractor;
+
+            auto objPtr = xmlXPathEvalExpression((xmlChar*)path.c_str(), context);
+
+            if (objPtr->nodesetval == nullptr)
+            {
+                allValid = false;
+                _log->WriteLog("Some error(1) while parsing the key[" + key + "] for url: " + url + " and elementIndex: " + std::to_string(elementIndex));
+                continue;
+            }
+
+            if (objPtr->nodesetval->nodeTab == nullptr)
+            {
+                allValid = false;
+                _log->WriteLog("Some error(2) while parsing the key[" + key + "] for url: " + url + " and elementIndex: " + std::to_string(elementIndex));
+                continue;
+            }
 
             xmlNodePtr html_element = xmlXPathEvalExpression((xmlChar*)path.c_str(), context)->nodesetval->nodeTab[0];
             if (html_element != nullptr)

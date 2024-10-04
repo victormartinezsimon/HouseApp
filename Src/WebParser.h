@@ -7,11 +7,12 @@
 #include <map>
 #include <vector>
 
+class Log;
 
 class WebParser
 {
 public:
-    WebParser(const std::string& str);
+    WebParser(const std::string& str, Log* log);
     ~WebParser();
 
     std::vector<std::map<std::string, std::string>> Parse(const WebParserConfig::WebData& webData, const std::string& url)const;
@@ -25,4 +26,5 @@ private:
     htmlDocPtr doc;
 
     std::map < std::string, std::function<std::string(const WebParserConfig::WebData& webData, const std::string& url, const std::string&)>> parseFunctions;
+    Log* _log;
 };

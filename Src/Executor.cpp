@@ -82,14 +82,25 @@ std::vector<size_t> Executor::ParseData(WebParserConfig* config, const std::stri
 
     std::vector<std::future<std::vector<size_t>>> futuresToWait;
 
-    for (auto&& url : webData.mainUrls)
+    if (_generalConfig->GetValueBool("use_threads"))
     {
-        futuresToWait.push_back(std::async(std::launch::async, &Executor::ParseDataWithUrl, this, config, key, url));
-    }
+        for (auto&& url : webData.mainUrls)
+        {
+            futuresToWait.push_back(std::async(std::launch::async, &Executor::ParseDataWithUrl, this, config, key, url));
+        }
 
-    for (size_t i = 0; i < futuresToWait.size(); ++i) {
-        auto hashesToAdd = futuresToWait[i].get();
-        newHashAdded.insert(newHashAdded.end(), hashesToAdd.begin(), hashesToAdd.end());
+        for (size_t i = 0; i < futuresToWait.size(); ++i) {
+            auto hashesToAdd = futuresToWait[i].get();
+            newHashAdded.insert(newHashAdded.end(), hashesToAdd.begin(), hashesToAdd.end());
+        }
+    }
+    else
+    {
+        for (auto&& url : webData.mainUrls)
+        {
+            auto hashesToAdd = ParseDataWithUrl(config, key, url);
+            newHashAdded.insert(newHashAdded.end(), hashesToAdd.begin(), hashesToAdd.end());
+        }
     }
    
     _log->WriteLog("finish searching for: " + key);
@@ -103,7 +114,7 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
 
     std::string txt = _downloader->Get(url);
 
-    WebParser* parser = new WebParser(txt);
+    WebParser* parser = new WebParser(txt, _log);
 
     auto result = parser->Parse(webData, url);
 
