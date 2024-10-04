@@ -1,11 +1,7 @@
 #include "WebParserConfig.h"
 #include "Log.h"
 
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/filereadstream.h"
 
-using namespace rapidjson;
 
 WebParserConfig::WebParserConfig(Log* log):_log(log) {}
 
@@ -29,37 +25,10 @@ void WebParserConfig::Parse(const std::string& path)
 
         WebData webData;
 
-        bool enabled = true;
-        if (v.HasMember("enabled"))
+        if (CanBeFiltered(v))
         {
-            enabled = v["enabled"].GetBool();
-        }
-
-        if (!enabled)
-        {
+            _log->WriteLog("Filtered some config!!!", Log::LOG_TYPE::LOG_LOW);
             continue;
-        }
-
-        if (v.HasMember("available_days"))
-        {
-            time_t timestamp = time(NULL);
-            struct tm datetime = *localtime(&timestamp);
-            int today = datetime.tm_wday;
-
-            bool anyValidDay = false;
-            for (auto& day : v["available_days"].GetArray())
-            {
-                int validDay = day.GetInt();
-                if (validDay == today)
-                {
-                    anyValidDay = true;
-                }
-            }
-
-            if (!anyValidDay)
-            {
-                continue;
-            }
         }
 
         webData.id = v["id"].GetString();
@@ -116,4 +85,39 @@ std::vector<std::string> WebParserConfig::GetAllKeys() const
         toReturn.push_back(v.first);
     }
     return toReturn;
+}
+
+bool WebParserConfig::CanBeFiltered(rapidjson::Value& v)
+{
+    if (v.HasMember("enabled"))
+    {
+        if (!v["enabled"].GetBool())
+        {
+            return true;
+        }
+    }
+
+    if (v.HasMember("available_days"))
+    {
+        time_t timestamp = time(NULL);
+        struct tm datetime = *localtime(&timestamp);
+        int today = datetime.tm_wday;
+
+        bool anyValidDay = false;
+        for (auto& day : v["available_days"].GetArray())
+        {
+            int validDay = day.GetInt();
+            if (validDay == today)
+            {
+                anyValidDay = true;
+            }
+        }
+
+        if (!anyValidDay)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

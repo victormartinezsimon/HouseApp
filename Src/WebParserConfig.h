@@ -6,6 +6,12 @@
 
 class Log;
 
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/filereadstream.h"
+
+using namespace rapidjson;
+
 class WebParserConfig
 {
 
@@ -33,6 +39,9 @@ public:
     void Parse(const std::string& path);
     const WebData  GetDataInfo(const std::string& str) const;
     std::vector<std::string> GetAllKeys() const;
+
+private:
+    bool CanBeFiltered(rapidjson::Value& v);
 
 private:
     std::map< std::string, WebData> _webData;
