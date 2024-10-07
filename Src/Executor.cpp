@@ -124,7 +124,7 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
     {
         auto url = r["url"];
         auto price = r["price"];
-        auto source = webData.id;
+        auto source = GetSource(config, key);
 
         Add add;
         add.BuildAdd(r);
@@ -184,4 +184,10 @@ bool Executor::AnyLeganesFilter(const Add* add)
     bool valid1 = url_minus.find("leganes") != std::string::npos;
     bool valid2 = url_minus.find("leganés") != std::string::npos;
     return valid1 || valid2;
+}
+
+std::string Executor::GetSource(WebParserConfig* config, const std::string& key) const
+{
+    auto webData = config->GetDataInfo(key);
+    return webData.id;
 }

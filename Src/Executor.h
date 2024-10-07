@@ -28,6 +28,8 @@ private:
     std::vector<size_t> ParseData(WebParserConfig* config, const std::string& key) const;
     std::vector<size_t> ParseDataWithUrl(WebParserConfig* config, const std::string& key, const std::string& url) const;
 
+    std::string GetSource(WebParserConfig* config, const std::string& key) const;
+
     bool OnlyLeganesNorteFilter(const Add* str);
     bool BigPrizesFilter(const Add* str);
     bool AnyLeganesFilter(const Add* str);
