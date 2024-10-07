@@ -122,8 +122,9 @@ bool WebParserConfig::CanBeFiltered(rapidjson::Value& v)
     if (v.HasMember("available_days"))
     {
         time_t timestamp = time(NULL);
-        struct tm datetime;
-        localtime_s(&datetime, &timestamp);
+        //struct tm datetime;
+        //localtime_s(&datetime, &timestamp);
+        struct tm datetime = *localtime(&timestamp);
         int today = datetime.tm_wday;
 
         bool anyValidDay = false;
