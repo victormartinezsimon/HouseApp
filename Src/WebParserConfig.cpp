@@ -66,6 +66,12 @@ void WebParserConfig::Parse(const std::string& path)
 
             webData.dataInfo.insert({ id_dataInfo, { id_dataInfo, path, data_extractor, data_parse_function } });
         }
+        std::string overrideID = "";
+        if (v.HasMember("overrideID"))
+        {
+            overrideID = v["overrideID"].GetString();
+        }
+        webData.overrideID = overrideID;
 
         _webData.insert({ webData.id , webData });
     }
@@ -100,7 +106,8 @@ bool WebParserConfig::CanBeFiltered(rapidjson::Value& v)
     if (v.HasMember("available_days"))
     {
         time_t timestamp = time(NULL);
-        struct tm datetime = *localtime(&timestamp);
+        struct tm datetime;
+        localtime_s(&datetime, &timestamp);
         int today = datetime.tm_wday;
 
         bool anyValidDay = false;

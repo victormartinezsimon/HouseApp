@@ -31,6 +31,7 @@ public:
         std::string mainPath;
         std::map<std::string, DataInfo> dataInfo;
         std::vector<std::string> filterFunctions;
+        std::string overrideID;
     };
 
 public:

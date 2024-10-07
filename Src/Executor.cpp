@@ -172,7 +172,7 @@ bool Executor::BigPrizesFilter(const Add* add)
 {
     std::string prize = add->price;
     prize.erase(std::remove(prize.begin(), prize.end(), '.'), prize.end());
-    float priceInt = atof(prize.c_str());
+    double priceInt = atof(prize.c_str());
     auto prize2 = priceInt + 1;
 
     return priceInt > 200000;
@@ -189,5 +189,14 @@ bool Executor::AnyLeganesFilter(const Add* add)
 std::string Executor::GetSource(WebParserConfig* config, const std::string& key) const
 {
     auto webData = config->GetDataInfo(key);
-    return webData.id;
+
+    if (webData.overrideID.empty())
+    {
+        return webData.id;
+    }
+    else
+    {
+        return webData.overrideID;
+    }
+
 }
