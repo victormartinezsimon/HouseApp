@@ -214,5 +214,65 @@
             "only_leganesNorte",
             "big_prizes"
         ]
+    },
+    {
+        "id": "Troya Idealista",
+        "overrideID": "Troya",
+        "main_urls": [
+            "https://www.idealista.com/pro/troya-servicios-inmobiliarios/venta-viviendas/"
+        ],
+        "main_path": "//article[@class = 'item-multimedia-container'] ",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a[@class = 'item-link']",
+                "data_extractor": "href",
+                "data_parse_function": "join_with_url"
+            },
+            {
+                "id": "price",
+                "path": ".//span[@class = 'item-price']",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ],
+        "filter_functions": [
+            "big_prizes"
+        ],
+        "enabled": false
+    },
+    {
+        "id": "Troya Fotocasa",
+        "overrideID": "Troya",
+        "main_urls": [
+            "https://www.fotocasa.es/es/inmobiliaria-servicios-inmobiliarios/comprar/inmuebles/espana/todas-las-zonas/l?clientId=500180019746"
+        ],
+        "enabled": false
+    },
+    {
+        "id": "Troya Pisos.com",
+        "overrideID": "Troya",
+        "main_urls": [
+            "https://www.pisos.com/inmobiliaria-troya_servicios_inmobiliarios_paloma_calvo_cervera"
+        ],
+        "main_path": "//div[@class = 'ad-preview'] ",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a[@class = 'ad-preview__title']",
+                "data_extractor": "href",
+                "data_parse_function": "join_with_url"
+            },
+            {
+                "id": "price",
+                "path": ".//span[@class = 'ad-preview__price']",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ],
+        "filter_functions": [
+            "big_prizes"
+        ],
+        "enabled": false
     }
 ]
