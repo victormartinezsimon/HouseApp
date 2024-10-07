@@ -20,6 +20,7 @@ public:
 private:
 
     std::string SaveValueAsString(rapidjson::Value& value)const;
+    std::string ReadFile(const std::string& path);
 
     std::map< std::string, std::string> _params;
 

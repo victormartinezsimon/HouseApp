@@ -1,20 +1,36 @@
 #include "WebParserConfig.h"
 #include "Log.h"
-
+#include <fstream>        // For read json file
+#include <sstream>        // To conver json file to string
 
 
 WebParserConfig::WebParserConfig(Log* log):_log(log) {}
 
+std::string WebParserConfig::ReadFile(const std::string& path)
+{
+    std::ifstream file(path);
+    if (!file.is_open()) 
+    {
+        _log->WriteLog("Error reading file: " + path, Log::LOG_TYPE::LOG_FATAL);
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();  // Leer el contenido del archivo en el buffer
+    return buffer.str();     // Convertir el buffer a string
+}
+
 void WebParserConfig::Parse(const std::string& path)
 {
-    FILE* fp = fopen(path.c_str(), "r"); // non-Windows use "r"
+    std::string jsonContent = ReadFile(path);
 
-    char readBuffer[65536];
-    FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+    // Crear el documento JSON
+    rapidjson::Document doc;
 
-    Document doc;
-    doc.ParseStream(is);
-
+    // Parsear el JSON
+    if (doc.Parse(jsonContent.c_str()).HasParseError()) {
+        _log->WriteLog("Error parsing file: " + path, Log::LOG_TYPE::LOG_FATAL);
+        return;
+    }
 
     for (auto& v : doc.GetArray())
     {

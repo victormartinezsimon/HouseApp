@@ -7,8 +7,6 @@
 class Log;
 
 #include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/filereadstream.h"
 
 using namespace rapidjson;
 
@@ -43,6 +41,7 @@ public:
 
 private:
     bool CanBeFiltered(rapidjson::Value& v);
+    std::string ReadFile(const std::string& path);
 
 private:
     std::map< std::string, WebData> _webData;
