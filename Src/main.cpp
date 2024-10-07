@@ -46,6 +46,18 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
     }
 }
 
+//#include <QApplication>
+//#include <QWebEngineView>
+//void test()
+//{
+//    QApplication app(argc, argv);
+//
+//    QWebEngineView view;
+//    view.setUrl(QUrl("https://ejemplo.com"));
+//    view.show();
+//
+//    return app.exec();
+//}
 
 int main()
 {

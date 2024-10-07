@@ -3,6 +3,7 @@
     "sqlitecpp",
     "curl",
     "libxml2",
-    "rapidjson"
+    "rapidjson",
+    "qtwebengine"
   ]
 }
