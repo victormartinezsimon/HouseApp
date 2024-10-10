@@ -69,7 +69,7 @@ int main()
     DatabaseConnector* db = new DatabaseConnector( generalConfig, log );
 
     log->WriteLog("Launching executor");
-    Executor* executor = new Executor(generalConfig, db, webConnectorCurl, log);
+    Executor* executor = new Executor(generalConfig, db, log);
     auto hashesAdded = executor->Run(config);
     
     if (generalConfig->GetValueBool("send_telegram_data", false))

@@ -15,7 +15,7 @@ class Executor
 {
 
 public:
-    Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader, Log* log);
+    Executor(GeneralConfig* generalConfig, DatabaseConnector* db, Log* log);
     ~Executor();
 
     std::vector<size_t> Run(WebParserConfig* config)const;
@@ -30,6 +30,8 @@ private:
 
     std::string GetSource(WebParserConfig* config, const std::string& key) const;
 
+    WebConnector* GetWebConnector(WebParserConfig* config, const std::string& key, const std::string& url) const;
+
     bool OnlyLeganesNorteFilter(const Add* str);
     bool BigPrizesFilter(const Add* str);
     bool AnyLeganesFilter(const Add* str);
@@ -37,7 +39,6 @@ private:
     std::string to_lower(const std::string& str);
 
     DatabaseConnector* _db;
-    WebConnector* _downloader;
     GeneralConfig* _generalConfig;
     Log* _log;
 

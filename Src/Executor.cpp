@@ -1,7 +1,6 @@
 #include "Executor.h"
 #include "DatabaseConnector.h"
 #include "WebParserConfig.h"
-#include "WebConnector.h"
 #include "WebParser.h"
 #include "Add.h"
 #include "GeneralConfig.h"
@@ -9,8 +8,10 @@
 #include <future>
 #include "Log.h"
 #include <algorithm>
+#include "WebConnectorCurl.h"
+#include "WebConnectorJS.h"
 
-Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConnector* downloader, Log* log) :_db(db), _downloader(downloader), _generalConfig(generalConfig),_log(log)
+Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, Log* log) :_db(db), _generalConfig(generalConfig),_log(log)
 {
     filterFunctions.insert({ "only_leganesNorte", [this](const Add* str) {return this->OnlyLeganesNorteFilter(str); } });
     filterFunctions.insert({ "big_prizes", [this](const Add* str) {return this->BigPrizesFilter(str); } });
@@ -20,7 +21,6 @@ Executor::Executor(GeneralConfig* generalConfig, DatabaseConnector* db, WebConne
 Executor::~Executor()
 {
     _db = nullptr;
-    _downloader = nullptr;
     _generalConfig = nullptr;
     _log = nullptr;
 }
@@ -112,7 +112,9 @@ std::vector<size_t> Executor::ParseDataWithUrl(WebParserConfig* config, const st
 {
     auto webData = config->GetDataInfo(key);
 
-    std::string txt = _downloader->Get(url);
+    WebConnector* downloader = GetWebConnector(config, key, url);
+    std::string txt = downloader->Get(url);
+    delete downloader;
 
     WebParser* parser = new WebParser(txt, _log);
 
@@ -198,5 +200,10 @@ std::string Executor::GetSource(WebParserConfig* config, const std::string& key)
     {
         return webData.overrideID;
     }
+}
 
+WebConnector* Executor::GetWebConnector(WebParserConfig* config, const std::string& key, const std::string& url) const
+{
+    WebConnectorCurl* curl = new WebConnectorCurl(_log);
+    return curl;
 }
