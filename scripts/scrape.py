@@ -27,7 +27,7 @@ driver.get(url)
 
 html = driver.page_source
 
-print(html)
+print(html.encode("utf-8"))
 
 driver.quit()
 

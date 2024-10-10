@@ -18,7 +18,24 @@
         "main_urls": [
             "https://grupoeminmobiliaria.com/propiedad/?dir_city=Legan%C3%A9s&property-type=&property-category="
         ],
-        "enabled": false
+        "useJavaScript": true,
+        "main_path": "//div[@class = 'list-content'] ",
+        "data_to_extract": [
+            {
+                "id": "url",
+                "path": ".//a",
+                "data_extractor": "href"
+            },
+            {
+                "id": "price",
+                "path": ".//h4[@class = 'name']",
+                "data_extractor": "",
+                "data_parse_function": "extract_first_number"
+            }
+        ],
+        "filter_functions": [
+            "big_prizes"
+        ]
     },
     {
         "id": "hogaresgroup",
