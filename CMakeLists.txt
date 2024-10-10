@@ -14,7 +14,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(SOURCES
     Src/main.cpp
     Src/DatabaseConnector.cpp
-    Src/WebConnector.cpp
     Src/WebParserConfig.cpp
     Src/Executor.cpp
     Src/WebParser.cpp
@@ -23,11 +22,11 @@ set(SOURCES
     Src/Add.cpp
     Src/Log.cpp
     Src/WebConnectorJS.cpp
+    Src/WebConnectorCurl.cpp
 )
 
 set(HEADERS
     Src/DatabaseConnector.h
-    Src/WebConnector.h
     Src/WebParserConfig.h
     Src/Executor.h
     Src/WebParser.h
@@ -35,7 +34,9 @@ set(HEADERS
     Src/ChatSender.h
     Src/Add.h
     Src/Log.h
+    Src/WebConnector.h
     Src/WebConnectorJS.h
+    Src/WebConnectorCurl.h
 )
 
 set(CMAKE_CXX_STANDARD 20)

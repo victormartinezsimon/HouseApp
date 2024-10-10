@@ -48,3 +48,9 @@ std::string WebConnectorJS::Get(const std::string& url) const
   
     return htmlContent;
 }
+
+std::string WebConnectorJS::Post(const std::string& url, const std::string& data) const
+{
+    _log->WriteLog("POST called in WebConnectorJS", Log::LOG_TYPE::LOG_FATAL);
+    return "";
+}

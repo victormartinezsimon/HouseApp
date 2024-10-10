@@ -1,4 +1,4 @@
-#include "WebConnector.h"
+#include "WebConnectorCurl.h"
 #include <curl/curl.h>
 #include "Log.h"
 
@@ -8,12 +8,12 @@
 
 using namespace rapidjson;
 
-WebConnector::WebConnector(Log* log):_log(log)
+WebConnectorCurl::WebConnectorCurl(Log* log):WebConnector(log)
 {
     // initialize curl globally
     curl_global_init(CURL_GLOBAL_ALL);
 }
-WebConnector::~WebConnector()
+WebConnectorCurl::~WebConnectorCurl()
 {
     // free up the global curl resources
     curl_global_cleanup();
@@ -29,7 +29,7 @@ size_t write_data(char* data, size_t size, size_t nmemb, void* clientp)
     return realsize;
 }
 
-std::string WebConnector::Get(const std::string& url) const
+std::string WebConnectorCurl::Get(const std::string& url) const
 {
     std::string response;
     CURL* handle = curl_easy_init();
@@ -49,7 +49,7 @@ std::string WebConnector::Get(const std::string& url) const
     return response;
 }
 
-std::string WebConnector::Post(const std::string& url, const std::string& data) const
+std::string WebConnectorCurl::Post(const std::string& url, const std::string& data) const
 {
     CURL* handle = curl_easy_init();
     std::string response;

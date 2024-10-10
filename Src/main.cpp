@@ -7,8 +7,9 @@
 #include "ChatSender.h"
 #include "Add.h"
 #include "Log.h"
+#include "WebConnectorCurl.h"
 
-std::string TryGetIDForChat(GeneralConfig* generalConfig, WebConnector* webConnector, ChatSender* chatSender)
+std::string TryGetIDForChat(GeneralConfig* generalConfig, ChatSender* chatSender)
 {
     std::string chat_key = generalConfig->GetValueString("chat_key");
     bool allowGetChatKey = generalConfig->GetValueBool("allow_get_chat_key");
@@ -46,71 +47,6 @@ void SendNewData(std::vector<size_t>& hashes, DatabaseConnector* db, ChatSender*
     }
 }
 
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <array>
-
-std::string exec(const char* cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd, "r"), _pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() falló!");
-    }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        result += buffer.data();
-    }
-    return result;
-}
-
-int main() {
-    // URL de la web
-    std::string url = "https://www.fotocasa.es/es/inmobiliaria-servicios-inmobiliarios/comprar/inmuebles/espana/todas-las-zonas/l?clientId=500180019746";
-
-    // Ajustar el comando según el sistema operativo
-#ifdef _WIN32
-    std::string python_cmd = "python scripts/scrape.py";
-#else
-    std::string python_cmd = "python3 scripts/scrape.py";
-#endif
-
-    std::string chromePath = "C:\\Users\\Victor\\Documents\\Workspace\\HouseApp\\Build\\scripts/chromedriver.exe";
-
-    // Construir el comando con la URL
-    std::string command = python_cmd + " " + url+ " " + chromePath;
-
-    try {
-        // Ejecuta el script de Selenium y captura la salida
-        std::string htmlContent = exec(command.c_str());
-
-        // Imprime el código fuente HTML capturado
-        std::cout << "HTML Source Code:\n" << htmlContent << std::endl;
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-    }
-
-    return 0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
 int main()
 {
     Log* log = new Log();
@@ -120,11 +56,11 @@ int main()
     GeneralConfig* generalConfig = new GeneralConfig(log);
     generalConfig->Parse("config/general_config.json");
 
-    WebConnector* webConnector = new WebConnector(log);
-    ChatSender* chatSender = new ChatSender(webConnector, generalConfig->GetValueString("telegram_key"), log);
+    WebConnectorCurl* webConnectorCurl = new WebConnectorCurl(log);
+    ChatSender* chatSender = new ChatSender(webConnectorCurl, generalConfig->GetValueString("telegram_key"), log);
     
     log->WriteLog("Try to get chat key");
-    std::string chat_key = TryGetIDForChat(generalConfig, webConnector, chatSender);
+    std::string chat_key = TryGetIDForChat(generalConfig, chatSender);
     
     log->WriteLog("Read web parser config");
     WebParserConfig* config = new WebParserConfig(log);
@@ -133,7 +69,7 @@ int main()
     DatabaseConnector* db = new DatabaseConnector( generalConfig, log );
 
     log->WriteLog("Launching executor");
-    Executor* executor = new Executor(generalConfig, db, webConnector, log);
+    Executor* executor = new Executor(generalConfig, db, webConnectorCurl, log);
     auto hashesAdded = executor->Run(config);
     
     if (generalConfig->GetValueBool("send_telegram_data", false))
@@ -157,4 +93,3 @@ int main()
     log->WriteLog("Finish!!", Log::LOG_TYPE::LOG_NORMAL);
     return 0;
 }
-*/

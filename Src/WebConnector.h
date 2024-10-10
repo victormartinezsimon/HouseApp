@@ -7,16 +7,14 @@ class Log;
 
 class WebConnector
 {
-    using DownloaderCallback = std::function<void(const std::string&)>;
+public:
+    WebConnector(Log* log) :_log(log) {}
+    virtual ~WebConnector() {}
 
 public:
-    WebConnector(Log* log);
-    ~WebConnector();
+    virtual std::string Get(const std::string& url) const { return ""; }
 
-public:
-    virtual std::string Get(const std::string& url) const;
-
-    std::string Post(const std::string& url, const std::string& data) const;
+    virtual std::string Post(const std::string& url, const std::string& data) const { return ""; }
 
 protected:
     Log* _log;
