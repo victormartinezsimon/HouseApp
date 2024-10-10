@@ -89,6 +89,13 @@ void WebParserConfig::Parse(const std::string& path)
         }
         webData.overrideID = overrideID;
 
+        bool useJavaScript = false;
+        if (v.HasMember("useJavaScript"))
+        {
+            useJavaScript = v["useJavaScript"].GetBool();
+        }
+        webData.useJavaScript = useJavaScript;
+
         _webData.insert({ webData.id , webData });
     }
 }

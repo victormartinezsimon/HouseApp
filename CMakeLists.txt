@@ -102,13 +102,21 @@ include_directories(${RAPIDJSON_INCLUDE_DIRS})
 target_compile_features(houseApp PRIVATE cxx_std_20)
 
 # Especifica la carpeta fuente y la carpeta de destino
-set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/config")
-set(DESTINATION_DIR "${CMAKE_BINARY_DIR}")
-
+set(SOURCE_DIR_CONFIG "${CMAKE_SOURCE_DIR}/config")
+set(DESTINATION_DIR_CONFIG "${CMAKE_BINARY_DIR}")
 # Comando para copiar los archivos de source_dir a destination_dir
-file(COPY "${SOURCE_DIR}" DESTINATION "${DESTINATION_DIR}")
+file(COPY "${SOURCE_DIR_CONFIG}" DESTINATION "${DESTINATION_DIR_CONFIG}")
 # Mensaje para confirmar que la copia se realizó
-message(STATUS "Archivos copiados de ${SOURCE_DIR} a ${DESTINATION_DIR}")
+message(STATUS "Archivos copiados de ${SOURCE_DIR_CONFIG} a ${DESTINATION_DIR_CONFIG}")
+
+
+# Especifica la carpeta fuente y la carpeta de destino
+set(SOURCE_DIR_SCRIPTS "${CMAKE_SOURCE_DIR}/scripts")
+set(DESTINATION_DIR_SCRIPTS "${CMAKE_BINARY_DIR}")
+# Comando para copiar los archivos de source_dir a destination_dir
+file(COPY "${SOURCE_DIR_SCRIPTS}" DESTINATION "${DESTINATION_DIR_SCRIPTS}")
+# Mensaje para confirmar que la copia se realizó
+message(STATUS "Archivos copiados de ${SOURCE_DIR_SCRIPTS} a ${DESTINATION_DIR_SCRIPTS}")
 
 
 message(STATUS "CMAKE FINALIZADO")

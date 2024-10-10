@@ -30,6 +30,7 @@ public:
         std::map<std::string, DataInfo> dataInfo;
         std::vector<std::string> filterFunctions;
         std::string overrideID;
+        bool useJavaScript = false;
     };
 
 public:

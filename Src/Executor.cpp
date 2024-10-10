@@ -204,6 +204,12 @@ std::string Executor::GetSource(WebParserConfig* config, const std::string& key)
 
 WebConnector* Executor::GetWebConnector(WebParserConfig* config, const std::string& key, const std::string& url) const
 {
-    WebConnectorCurl* curl = new WebConnectorCurl(_log);
-    return curl;
+    if (config->GetDataInfo(key).useJavaScript)
+    {
+        return new WebConnectorJS(_log);
+    }
+    else
+    {
+        return new WebConnectorCurl(_log);
+    }
 }
