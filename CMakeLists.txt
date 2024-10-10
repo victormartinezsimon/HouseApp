@@ -22,6 +22,7 @@ set(SOURCES
     Src/ChatSender.cpp
     Src/Add.cpp
     Src/Log.cpp
+    Src/WebConnectorJS.cpp
 )
 
 set(HEADERS
@@ -34,6 +35,7 @@ set(HEADERS
     Src/ChatSender.h
     Src/Add.h
     Src/Log.h
+    Src/WebConnectorJS.h
 )
 
 set(CMAKE_CXX_STANDARD 20)
