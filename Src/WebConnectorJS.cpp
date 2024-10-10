@@ -36,7 +36,7 @@ std::string WebConnectorJS::Get(const std::string& url) const
     // Ajustar el comando según el sistema operativo
 #ifdef _WIN32
     std::string python_cmd = "python scripts/scrape.py";
-    std::string chromePath = "C:\\Users\\Victor\\Documents\\Workspace\\HouseApp\\Build\\scripts/chromedriver.exe";
+    std::string chromePath = "./scripts/chromedriver.exe";
 #else
     std::string python_cmd = "python3 scripts/scrape.py";
 #endif
